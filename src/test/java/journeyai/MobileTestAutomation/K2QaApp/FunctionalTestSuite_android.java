@@ -16,12 +16,12 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.openqa.selenium.By;
 
-public class FunctionalTestSuite {
+public class FunctionalTestSuite_android {
 	
 	boolean registered = false;
 
 	@Parameters({ "platform" })
-	public FunctionalTestSuite(@Optional("android") String platform) {
+	public FunctionalTestSuite_android(@Optional("android") String platform) {
 		TestManager.platform = platform;
 		
 		FrameworkUtility.initAppiumDriver(platform);

@@ -4,3 +4,48 @@ Asssumptions:
 2. Download the source and in eclipse import -> existing Maven project and select the root folder
 3. Add all the Appium jar files required for automation
 4. Now select andropid/ios testng.xml file and run as testng suite.
+
+
+#Directory structure:
+
+	
+	 MobileTestAutomationFramework (Root Folder)
+	|
+	| - > src -> main -> java (for application source, can be ignored)
+	|->src -> test -> java
+			|
+			| -> journey.mobiletestautomation.framework
+				
+							|-> CreateTestDriver.java
+							|->FrameworkUtility.java
+							|-> TestManager.java
+							|-> FrameworkGlobal.properties
+
+
+			| -> Journeyai.MobileTestAutomation
+						| -> K2QAApp -> |
+								| -> App related automation files
+								| -> AppGlobal.properties
+								| -> android_resources.properties
+								| -> ios_resources.properties
+
+						|
+						|-> SFA 
+							| -> App related automation files
+							| -> AppGlobal.properties
+							| -> android_resources.properties
+							| -> ios_resources.properties
+						|
+						|-> App3 -> 
+						|
+						|-> App4 ->
+						|
+						…
+	|-pom.xml
+	|-> QaApp_android_testng.xml (this file will run all tests for android QAApp)
+	|-> QaApp_ios_testng.xml (this file will run all tests for iOS QAApp)
+	|
+	|-> SfaApp_android_testng.xml. (this file will run all tests for android SfaApp)
+	|-> SfaApp_ios_testng.xml. (this file will run all tests for iOS SfaApp)
+	|
+	…

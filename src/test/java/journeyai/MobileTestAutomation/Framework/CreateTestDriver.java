@@ -63,7 +63,7 @@ public class CreateTestDriver {
 		d.setCapability(MobileCapabilityType.DEVICE_NAME, TestManager.globalParams.getProperty("iosdevicename"));
 		d.setCapability(MobileCapabilityType.PLATFORM_NAME, "iOS");
 		d.setCapability(MobileCapabilityType.AUTOMATION_NAME, AutomationName.IOS_XCUI_TEST);
-		d.setCapability(MobileCapabilityType.APP, "/Users/kuladeep/Downloads/Journey_Mobile_Automation/MobileTestAutomation/src/test/java/journeyai/MobileTestAutomation/K2QaApp/appsUnderTest/JourneyQA_app.zip");
+		d.setCapability(MobileCapabilityType.APP, iosAppFile.getAbsolutePath());
 
 		IOSDriver<MobileElement> driver = new IOSDriver <MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"),d);
 

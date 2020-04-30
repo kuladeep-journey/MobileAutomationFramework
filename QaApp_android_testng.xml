@@ -4,7 +4,7 @@
 <parameter name="platform" value="android" />
   <test thread-count="5" name="Test">
     <classes>
-      <class name="journeyai.MobileTestAutomation.K2QaApp.FunctionalTestSuite"/>
+      <class name="journeyai.MobileTestAutomation.K2QaApp.FunctionalTestSuite_android"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

@@ -90,9 +90,9 @@ public class FunctionalTestSuite_android {
 		} else {
 			Assert.assertEquals(AppCommon.waitForPopUpwithID(GlobalValues.PopUpDescId, 0), true);
 			FrameworkUtility.AddDelay(1000);
-			TestManager.driver.findElement(By.id("ai.journey.k2bank:id/inputCard")).sendKeys("United States Of America");
+			FrameworkUtility.findElementById("ai.journey.k2bank:id/inputCard").sendKeys("United States Of America");
 			FrameworkUtility.AddDelay(1000);
-			TestManager.driver.findElement(By.id("ai.journey.k2bank:id/verify")).click();
+			FrameworkUtility.findElementById("ai.journey.k2bank:id/verify").click();
 			FrameworkUtility.AddDelay(1000);
 			Assert.assertEquals(
 					FrameworkUtility.verifyToastText(GlobalValues.ToastSuccess, GlobalValues.TOAST_MAX_WAIT_DURATION),
@@ -103,7 +103,7 @@ public class FunctionalTestSuite_android {
 
 	}
 
-	@Test
+//	@Test
 	public void verifySsn() throws InterruptedException {
 		System.out.println("In SSN Verification..........................: START");
 		boolean errorToast = false;
@@ -126,9 +126,9 @@ public class FunctionalTestSuite_android {
 		} else {
 			Assert.assertEquals(AppCommon.waitForPopUpwithID(GlobalValues.PopUpDescId, 0), true);
 			FrameworkUtility.AddDelay(1000);
-			TestManager.driver.findElement(By.id("ai.journey.k2bank:id/editText")).sendKeys("1234");
+			FrameworkUtility.findElementById("ai.journey.k2bank:id/editText").sendKeys("1234");
 			FrameworkUtility.AddDelay(1000);
-			TestManager.driver.findElement(By.id("ai.journey.k2bank:id/verify")).click();
+			FrameworkUtility.findElementById("ai.journey.k2bank:id/verify").click();
 			FrameworkUtility.AddDelay(1000);
 			Assert.assertEquals(
 					FrameworkUtility.verifyToastText(GlobalValues.ToastSuccess, GlobalValues.TOAST_MAX_WAIT_DURATION),
@@ -142,7 +142,7 @@ public class FunctionalTestSuite_android {
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	@Test
+//	@Test
 	public void verifyDob() throws InterruptedException {
 		System.out.println("In DOB Verification..........................: START");
 		boolean errorToast = false;
@@ -154,8 +154,8 @@ public class FunctionalTestSuite_android {
 		if (errorToast == false) {
 			// If there is no error, then wait for pop-up menu.
 			Assert.assertEquals(AppCommon.waitForPopUpwithID(GlobalValues.PopUpDescId, 0), true);
-			TestManager.driver.findElement(By.id("ai.journey.k2bank:id/inputCard")).sendKeys("01011985");
-			TestManager.driver.findElement(By.id("ai.journey.k2bank:id/verify")).click();
+			FrameworkUtility.findElementById("ai.journey.k2bank:id/inputCard").sendKeys("01011985");
+			FrameworkUtility.findElementById("ai.journey.k2bank:id/verify").click();
 			Assert.assertEquals(
 					FrameworkUtility.verifyToastText(GlobalValues.ToastSuccess, GlobalValues.TOAST_MAX_WAIT_DURATION),
 					true);
@@ -172,7 +172,7 @@ public class FunctionalTestSuite_android {
 
 	}
 
-	@Test
+//	@Test
 	public void verifyFraudNotification() throws InterruptedException {
 		System.out.println("In FRAUD NOTIFICATION Verification..........................: START");
 		boolean errorToast = false;
@@ -196,7 +196,7 @@ public class FunctionalTestSuite_android {
 
 	}
 
-	@Test
+//	@Test
 	public void verifyOutBoundCall() throws InterruptedException {
 //		WebDriverWait wait = new WebDriverWait(TestManager.driver, 120);
 //

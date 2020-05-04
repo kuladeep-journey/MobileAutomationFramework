@@ -46,7 +46,32 @@ public class FrameworkUtility {
 		return false;
 	}
 	
+	
+	public static MobileElement waitForElementVisible(String id, String xPath, int maxWaitSeconds) {
 		
+		WebDriverWait wait = new WebDriverWait(TestManager.driver, maxWaitSeconds);
+
+		MobileElement element = null;
+		
+		if (maxWaitSeconds == 0) {
+			maxWaitSeconds = FrameworkUtility.getDefaultFWSleepTime();
+		}
+		
+		if (id != null) {
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.id(id)));
+			
+			element = TestManager.driver.findElement(By.id(id));	
+		} else if (xPath !=null) {
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xPath)));
+				
+				element = TestManager.driver.findElement(By.xpath(xPath));	
+		}
+		
+		
+		return element;
+	}
+	
+			
 	// if User wants default delay it is 2 seconds
 	public static void AddDelay(int milliSec) {
 		if (milliSec == 0) {

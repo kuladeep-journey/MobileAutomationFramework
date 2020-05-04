@@ -78,7 +78,7 @@ public class AppCommon {
 
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(toastXpath)));
 		
-		return FrameworkUtility.findelementByXpath(toastXpath);
+		return FrameworkUtility.findElementByXpath(toastXpath);
 	}
 
 

@@ -12,7 +12,7 @@ public class LoginPage {
 	}
 
 	public void initElements() {
-		LoginButton = FrameworkUtility.findelementByXpath("//android.widget.TextView[@text=\"Login\"]");
+		LoginButton = FrameworkUtility.findElementByXpath("//android.widget.TextView[@text=\"Login\"]");
 	}
 	
 	public boolean isLoginPage() {

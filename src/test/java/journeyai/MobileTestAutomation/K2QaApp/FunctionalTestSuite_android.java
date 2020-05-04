@@ -30,7 +30,7 @@ public class FunctionalTestSuite_android {
 
 	@BeforeMethod
 	public void addDelay() {
-		FrameworkUtility.AddDelay(2000);
+		FrameworkUtility.AddDelay(5000);
 		
 	}
 
@@ -61,10 +61,7 @@ public class FunctionalTestSuite_android {
 		Assert.assertEquals(toastText.equalsIgnoreCase(GlobalValues.ToastSuccess), true);
 
 		registered = true;
-		// System.out.printf("\n Register mobile number Success ? %b \n", registered);
-		// System.out.println("In Register Mobile Number ............................. : END");
-//		 add delay to let toast get disappeared.
-		FrameworkUtility.AddDelay(2000);
+//		FrameworkUtility.AddDelay(2000);
 	}
 
 	@Test
@@ -202,5 +199,16 @@ public class FunctionalTestSuite_android {
 //
 //		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("com.android.dialer:id/op_name")));
 //		TestManager.driver.findElement(By.id("com.android.dialer:id/touch_view")).sendKeys("0.1");
+	}
+	
+	@Test
+	public void verifyzResetDesktopAgent() throws InterruptedException {
+		System.out.println("Reset Desktop Agent and Register mobile again............................. : START");
+		AppCommon.switchToAgentView();
+
+		FrameworkUtility.findElementById("ai.journey.k2bank:id/reset").click();
+		FrameworkUtility.AddDelay(500);
+//			registerMobilenumber();
+		System.out.println("Reset Desktop Agent and Register mobile again............................. : END");
 	}
 }

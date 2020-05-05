@@ -58,6 +58,10 @@
 					<suiteXmlFiles>
 						<suiteXmlFile>${FileName}</suiteXmlFile>
 					</suiteXmlFiles>
+<!-- 					<systemPropertyVariables>
+                  <AppName>${AppName}</AppName>
+                    <phonenumber>${phonenumber}</phonenumber> 
+                </systemPropertyVariables> -->
 				</configuration>
 			</plugin>
 

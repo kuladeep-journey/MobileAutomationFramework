@@ -26,10 +26,12 @@ public class FunctionalTestSuite_iOS {
 
 	boolean registered = false;
 
-	@Parameters({ "platform" })
-	public FunctionalTestSuite_iOS(@Optional("ios") String platform) {
+	@Parameters({ "platform"}) //, "phonenumber" })
+	public FunctionalTestSuite_iOS(@Optional("ios") String platform) { //, String phonenumber) {
 
 		TestManager.platform = platform;
+//		TestManager.appProperties.setProperty("phonenumber", phonenumber);
+		
 		FrameworkUtility.initAppiumDriver(platform);
 		FrameworkUtility.AddDelay(2000);
 
@@ -53,26 +55,30 @@ public class FunctionalTestSuite_iOS {
 		}
 
 		AppCommon.switchToSDKView();
-		FrameworkUtility.findElementById("registerPhone").click();
+
+		FrameworkUtility.findElementById(
+				TestManager.appProperties.getProperty("sdk_page_register_phone_btn_id"))
+				.click();
 		FrameworkUtility.AddDelay(500);
 		MobileElement ele = FrameworkUtility.findElementWithValue("XCUIElementTypeTextField", "Phone Number");
 		ele.click();
 		FrameworkUtility.AddDelay(500);
-		ele.sendKeys(TestManager.globalParams.getProperty("phonenumber").toString());
+
+		ele.sendKeys(TestManager.appProperties.getProperty("phonenumber").toString());
 		FrameworkUtility.AddDelay(500);
-		FrameworkUtility.findElementById("Register").click();
+
+		FrameworkUtility.findElementById(
+				TestManager.appProperties.getProperty("register_phone_popup_register_btn_id"))
+				.click();
+		
 		MobileElement toast = AppCommon.waitForToast(null, GlobalValues.TOAST_MAX_WAIT_DURATION);
 
 		String toastText = AppCommon.getToastText(toast);
 		System.out.printf("\n Toast Text \n" + toastText);
-		Assert.assertEquals(toastText.equalsIgnoreCase(GlobalValues.ToastSuccess), true);
+		Assert.assertEquals(toastText.equalsIgnoreCase(TestManager.appProperties.getProperty("toast_text_success")), true);
 
 		registered = true;
-		// System.out.printf("\n Register mobile number Success ? %b \n", registered);
-		// System.out.println("In Register Mobile Number ............................. :
-		// END");
-//			 add delay to let toast get disappeared.
-		FrameworkUtility.AddDelay(2000);
+	
 	}
 
 	@Test
@@ -83,7 +89,9 @@ public class FunctionalTestSuite_iOS {
 		registerMobilenumber();
 		AppCommon.switchToAgentView();
 
-		FrameworkUtility.findButtonWithText("addressVerification").click();
+		FrameworkUtility.findButtonWithText(
+				TestManager.appProperties.getProperty("agent_page_address_verification_btn_text"))
+				.click();
 
 		MobileElement toast = AppCommon.waitForToast(null, GlobalValues.TOAST_MAX_WAIT_DURATION);
 		String toastText = toast.getText();
@@ -97,6 +105,27 @@ public class FunctionalTestSuite_iOS {
 			Assert.assertTrue(false, "Error: Desktop Agent returned :" + toastText);
 
 		} else {
+			// wait for poup
+			Assert.assertEquals(AppCommon.waitForPopUpwithID(
+					TestManager.appProperties.getProperty("verification_push_notification_desc_Id"),0),
+					true);
+			FrameworkUtility.AddDelay(1000);
+			FrameworkUtility.findElementById(
+					TestManager.appProperties.getProperty("push_notification_address_input"))
+					.sendKeys(TestManager.appProperties.getProperty("push_notification_address_to_enter"));
+			FrameworkUtility.AddDelay(1000);
+			FrameworkUtility.findElementById(
+					TestManager.appProperties.getProperty("push_notification_verify_btn_id"))
+					.click();
+			FrameworkUtility.AddDelay(1000);
+			Assert.assertEquals(
+					FrameworkUtility.verifyToastText(
+							TestManager.appProperties.getProperty("toast_text_success"), 
+							GlobalValues.TOAST_MAX_WAIT_DURATION), true);
+			
+			FrameworkUtility.AddDelay(GlobalValues.DEFAULT_DELAY_MILLISEC);
+			System.out.println(
+					"ADDRESS Verification: Push notification and verification is yet to be implemented");
 
 		}
 		System.out.println("Completed ADDRESS Verification............................. SUCCESS : END");
@@ -110,8 +139,11 @@ public class FunctionalTestSuite_iOS {
 		registerMobilenumber();
 		AppCommon.switchToAgentView();
 
-		FrameworkUtility.findButtonWithText("ssnVerification").click();
-
+//		FrameworkUtility.findButtonWithText("ssnVerification").click();
+		FrameworkUtility.findButtonWithText(
+				TestManager.appProperties.getProperty("agent_page_ssn_verification_btn_text"))
+				.click();
+		
 		MobileElement toast = AppCommon.waitForToast(null, GlobalValues.TOAST_MAX_WAIT_DURATION);
 		String toastText = toast.getText();
 
@@ -137,7 +169,9 @@ public class FunctionalTestSuite_iOS {
 		registerMobilenumber();
 		AppCommon.switchToAgentView();
 
-		FrameworkUtility.findButtonWithText("dobVerification").click();
+		FrameworkUtility.findButtonWithText(
+				TestManager.appProperties.getProperty("agent_page_dob_verification_btn_text"))
+				.click();
 
 		MobileElement toast = AppCommon.waitForToast(null, GlobalValues.TOAST_MAX_WAIT_DURATION);
 		String toastText = toast.getText();
@@ -164,7 +198,10 @@ public class FunctionalTestSuite_iOS {
 		registerMobilenumber();
 		AppCommon.switchToAgentView();
 
-		FrameworkUtility.findButtonWithText("fraudVerification").click();
+		FrameworkUtility.findButtonWithText(
+				TestManager.appProperties.getProperty("agent_page_fraud_verification_btn_text"))
+				.click();
+
 
 		MobileElement toast = AppCommon.waitForToast(null, GlobalValues.TOAST_MAX_WAIT_DURATION);
 		String toastText = toast.getText();
@@ -191,7 +228,11 @@ public class FunctionalTestSuite_iOS {
 		registerMobilenumber();
 		AppCommon.switchToAgentView();
 
-		FrameworkUtility.findButtonWithText("outboundCall").click();
+//		FrameworkUtility.findButtonWithText("outboundCall").click();
+		FrameworkUtility.findButtonWithText(
+				TestManager.appProperties.getProperty("agent_page_outboundcall_verification_btn_text"))
+				.click();
+
 
 		MobileElement toast = AppCommon.waitForToast(null, GlobalValues.TOAST_MAX_WAIT_DURATION);
 		String toastText = toast.getText();
@@ -205,7 +246,7 @@ public class FunctionalTestSuite_iOS {
 			Assert.assertTrue(false, "Error: Desktop Agent returned :" + toastText);
 
 		} else {
-			Assert.assertTrue(false, "Error: Intentional failing here..., just correct it:" + toastText);
+			
 		}
 		System.out.println("Completed OUTBOUND CALL Verification............................. SUCCESS : END");
 
@@ -216,7 +257,10 @@ public class FunctionalTestSuite_iOS {
 		System.out.println("Reset Desktop Agent and Register mobile again............................. : START");
 		AppCommon.switchToSettingsView();
 
-		FrameworkUtility.findElementById("resetContactCenter").click();
+		FrameworkUtility.findElementById(
+				TestManager.appProperties.getProperty("agent_page_reset_agent_btn_id"))
+				.click();
+		
 		FrameworkUtility.AddDelay(500);
 //			registerMobilenumber();
 		System.out.println("Reset Desktop Agent and Register mobile again............................. : END");

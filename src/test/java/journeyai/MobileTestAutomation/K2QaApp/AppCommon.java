@@ -24,7 +24,9 @@ public class AppCommon {
 	public static void switchToSDKView() {
 
 		if (TestManager.platform.equalsIgnoreCase("android")) {
-			FrameworkUtility.findElementById("ai.journey.k2bank:id/navigation_sdkview").click();
+			FrameworkUtility.findElementById(
+					TestManager.appProperties.getProperty("sdk_tab_page_id"))
+					.click();
 		} else if (TestManager.platform.equalsIgnoreCase("ios")) {
 			FrameworkUtility.findElementById("Bank").click();
 		}
@@ -34,9 +36,12 @@ public class AppCommon {
 
 	// This method will switch to Desktop Agent view on mobile app
 	public static void switchToAgentView() {
+		
 //		TestManager.driver.findElement(By.id("ai.journey.k2bank:id/navigation_dashboard")).click();
 		if (TestManager.platform.equalsIgnoreCase("android" )) {
-			FrameworkUtility.findElementById("ai.journey.k2bank:id/navigation_dashboard").click();
+			FrameworkUtility.findElementById(
+					TestManager.appProperties.getProperty("agent_tab_page_id"))
+					.click();
 		} else if (TestManager.platform.equalsIgnoreCase("ios" )) {
 			FrameworkUtility.findElementById("Agent").click();
 		}
@@ -48,7 +53,9 @@ public class AppCommon {
 	public static void switchToSettingsView() {
 //		TestManager.driver.findElement(By.id("ai.journey.k2bank:id/navigation_settings")).click();
 		if (TestManager.platform.equalsIgnoreCase("android" )) {
-			FrameworkUtility.findElementById("ai.journey.k2bank:id/navigation_settings").click();
+			FrameworkUtility.findElementById(
+					TestManager.appProperties.getProperty("settings_tab_page_id"))
+					.click();
 		} else if (TestManager.platform.equalsIgnoreCase("ios" )) {
 			FrameworkUtility.findElementById("Settings").click();
 		}
@@ -68,7 +75,7 @@ public class AppCommon {
 		}
 		if (toastXpath == null ) {
 			if( TestManager.platform.equalsIgnoreCase("android")) {
-				toastXpath = "//android.widget.Toast";	
+				toastXpath = TestManager.appProperties.getProperty("toast_xpath");	
 			} else if ( TestManager.platform.equalsIgnoreCase("ios")) {
 				toastXpath = "//XCUIElementTypeStaticText[@name=\"Toast\"]"; // //XCUIElementTypeWindow[@name=\"Toast\"]";
 			}
@@ -84,10 +91,15 @@ public class AppCommon {
 
 	public static boolean waitForPopUpwithID(String popupId, int maxWaitSeconds) {
 		String expectedTxt = "Bank is requesting you verify";
-
+		if (maxWaitSeconds == 0) {
+			maxWaitSeconds = 10;
+		}
 		WebDriverWait wait = new WebDriverWait(TestManager.driver, maxWaitSeconds);
 
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(popupId)));
+		TestManager.driver.findElement(By.id(
+				TestManager.appProperties.getProperty("verification_push_notification_desc_Id")))
+				.getText().toLowerCase();
 		String txt = TestManager.driver.findElement(By.id("ai.journey.k2bank:id/dialogDesc")).getText().toLowerCase();
 		System.out.printf(" \n Expected Text : %s \n", expectedTxt);
 		System.out.printf("\n Actual Text : %s \n", txt);

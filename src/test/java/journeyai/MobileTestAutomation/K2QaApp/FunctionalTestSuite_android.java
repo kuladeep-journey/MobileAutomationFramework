@@ -3,6 +3,7 @@ package journeyai.MobileTestAutomation.K2QaApp;
 import org.testng.annotations.Test;
 
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.android.AndroidDriver;
 
 import org.testng.annotations.Test;
 
@@ -11,18 +12,22 @@ import org.testng.Assert;
 import journeyai.MobileTestAutomation.Framework.TestManager;
 import journeyai.MobileTestAutomation.Framework.FrameworkUtility;
 
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class FunctionalTestSuite_android {
-	
+
 	boolean registered = false;
 
-	@Parameters({ "platform" })
-	public FunctionalTestSuite_android(@Optional("android") String platform) {
+	@Parameters({ "platform"})// , "phonenumber" })
+	public FunctionalTestSuite_android(@Optional("android") String platform) { // , String phonenumber) {
 		TestManager.platform = platform;
+//		TestManager.appProperties.setProperty("phonenumber", phonenumber);
 		
 		FrameworkUtility.initAppiumDriver(platform);
 		FrameworkUtility.AddDelay(2000);
@@ -30,8 +35,8 @@ public class FunctionalTestSuite_android {
 
 	@BeforeMethod
 	public void addDelay() {
-		FrameworkUtility.AddDelay(5000);
-		
+		FrameworkUtility.AddDelay(2000);
+
 	}
 
 	@Test
@@ -41,18 +46,22 @@ public class FunctionalTestSuite_android {
 			System.out.println("Mobile number already registered, Thus not registering again, but skipping this step ");
 			return;
 		}
-		
+
 		AppCommon.switchToSDKView();
-		FrameworkUtility.findElementById("ai.journey.k2bank:id/registerPhone").click();
 
-		FrameworkUtility.AddDelay(2000);
+		FrameworkUtility.findElementById(TestManager.appProperties.getProperty("sdk_page_register_phone_btn_id"))
+				.click();
 
-		
-		MobileElement element = FrameworkUtility.findElementWithValue("android.widget.EditText", "Enter phone number");
+		FrameworkUtility.AddDelay(500);
 
-		element.sendKeys(TestManager.globalParams.getProperty("phonenumber").toString());
+		MobileElement element = FrameworkUtility.findElementWithValue(
+				TestManager.appProperties.getProperty("register_phone_popup_text_input_type"),
+				TestManager.appProperties.getProperty("register_phone_popup_text_input_deault_text"));
 
-		FrameworkUtility.findElementById("ai.journey.k2bank:id/register").click();
+		element.sendKeys(TestManager.appProperties.getProperty("phonenumber").toString());
+
+		FrameworkUtility.findElementById(TestManager.appProperties.getProperty("register_phone_popup_register_btn_id"))
+				.click();
 
 		MobileElement toast = AppCommon.waitForToast(null, GlobalValues.TOAST_MAX_WAIT_DURATION);
 
@@ -61,7 +70,7 @@ public class FunctionalTestSuite_android {
 		Assert.assertEquals(toastText.equalsIgnoreCase(GlobalValues.ToastSuccess), true);
 
 		registered = true;
-//		FrameworkUtility.AddDelay(2000);
+
 	}
 
 	@Test
@@ -71,12 +80,14 @@ public class FunctionalTestSuite_android {
 		registerMobilenumber();
 		AppCommon.switchToAgentView();
 
-		FrameworkUtility.findButtonWithText(GlobalValues.ADDRESS_VERIFICATION_BTN).click();
-		
+		FrameworkUtility.findButtonWithText(
+				TestManager.appProperties.getProperty("agent_page_address_verification_btn_text"))
+				.click();
+
 		MobileElement toast = AppCommon.waitForToast(null, GlobalValues.TOAST_MAX_WAIT_DURATION);
 		String toastText = toast.getText();
 
-		if (toastText.toLowerCase().contains("error")) {
+		if (toastText.toLowerCase().contains(TestManager.appProperties.getProperty("toast_text_error"))) {
 			// If there is no error, then wait for pop-up menu.
 
 			// asserting again to false just to inform testng that this case is failed.
@@ -85,15 +96,23 @@ public class FunctionalTestSuite_android {
 			Assert.assertTrue(false, "Error: Desktop Agent returned :" + toastText);
 
 		} else {
-			Assert.assertEquals(AppCommon.waitForPopUpwithID(GlobalValues.PopUpDescId, 0), true);
+			Assert.assertEquals(AppCommon.waitForPopUpwithID(
+					TestManager.appProperties.getProperty("verification_push_notification_desc_Id"),0),
+					true);
 			FrameworkUtility.AddDelay(1000);
-			FrameworkUtility.findElementById("ai.journey.k2bank:id/inputCard").sendKeys("United States Of America");
+			FrameworkUtility.findElementById(
+					TestManager.appProperties.getProperty("push_notification_address_input"))
+					.sendKeys(TestManager.appProperties.getProperty("push_notification_address_to_enter"));
 			FrameworkUtility.AddDelay(1000);
-			FrameworkUtility.findElementById("ai.journey.k2bank:id/verify").click();
+			FrameworkUtility.findElementById(
+					TestManager.appProperties.getProperty("push_notification_verify_btn_id"))
+					.click();
 			FrameworkUtility.AddDelay(1000);
 			Assert.assertEquals(
-					FrameworkUtility.verifyToastText(GlobalValues.ToastSuccess, GlobalValues.TOAST_MAX_WAIT_DURATION),
-					true);
+					FrameworkUtility.verifyToastText(
+							TestManager.appProperties.getProperty("toast_text_success"), 
+							GlobalValues.TOAST_MAX_WAIT_DURATION), true);
+			
 			FrameworkUtility.AddDelay(GlobalValues.DEFAULT_DELAY_MILLISEC);
 		}
 		System.out.println("Completed ADDRESS Verification............................. SUCCESS : END");
@@ -107,8 +126,11 @@ public class FunctionalTestSuite_android {
 		registerMobilenumber();
 		AppCommon.switchToAgentView();
 
-		FrameworkUtility.findButtonWithText(GlobalValues.SSN_VERIFICATION_BTN).click();
-		
+//		FrameworkUtility.findButtonWithText(GlobalValues.SSN_VERIFICATION_BTN).click();
+		FrameworkUtility.findButtonWithText(
+				TestManager.appProperties.getProperty("agent_page_ssn_verification_btn_text"))
+				.click();
+
 		MobileElement toast = AppCommon.waitForToast(null, GlobalValues.TOAST_MAX_WAIT_DURATION);
 		String toastText = toast.getText();
 
@@ -121,23 +143,12 @@ public class FunctionalTestSuite_android {
 			Assert.assertTrue(false, "Error: Desktop Agent returned :" + toastText);
 
 		} else {
-			Assert.assertEquals(AppCommon.waitForPopUpwithID(GlobalValues.PopUpDescId, 0), true);
-			FrameworkUtility.AddDelay(1000);
-			FrameworkUtility.findElementById("ai.journey.k2bank:id/editText").sendKeys("1234");
-			FrameworkUtility.AddDelay(1000);
-			FrameworkUtility.findElementById("ai.journey.k2bank:id/verify").click();
-			FrameworkUtility.AddDelay(1000);
-			Assert.assertEquals(
-					FrameworkUtility.verifyToastText(GlobalValues.ToastSuccess, GlobalValues.TOAST_MAX_WAIT_DURATION),
-					true);
-			FrameworkUtility.AddDelay(GlobalValues.DEFAULT_DELAY_MILLISEC);
+
 		}
 		Thread.sleep(3000);
 		System.out.println("Completed SSN Verification.......................... SUCCESS : END");
 
 	}
-
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //	@Test
 	public void verifyDob() throws InterruptedException {
@@ -146,25 +157,24 @@ public class FunctionalTestSuite_android {
 		registerMobilenumber();
 		AppCommon.switchToAgentView();
 
-		FrameworkUtility.findButtonWithText(GlobalValues.DOB_VERIFICATION_BTN).click();
-		errorToast = FrameworkUtility.verifyToastText(GlobalValues.ToastError, GlobalValues.TOAST_MAX_WAIT_DURATION);
-		if (errorToast == false) {
-			// If there is no error, then wait for pop-up menu.
-			Assert.assertEquals(AppCommon.waitForPopUpwithID(GlobalValues.PopUpDescId, 0), true);
-			FrameworkUtility.findElementById("ai.journey.k2bank:id/inputCard").sendKeys("01011985");
-			FrameworkUtility.findElementById("ai.journey.k2bank:id/verify").click();
-			Assert.assertEquals(
-					FrameworkUtility.verifyToastText(GlobalValues.ToastSuccess, GlobalValues.TOAST_MAX_WAIT_DURATION),
-					true);
-			FrameworkUtility.AddDelay(GlobalValues.DEFAULT_DELAY_MILLISEC);
-		} else {
-			// asserting again to false just to inform testng that this case is failed.
-			System.out.println("Completed DOB Verification: AgentDesktop API ereturned Error, Status........ : FAILED");
-			Assert.assertEquals(errorToast, false);
-		}
+//		FrameworkUtility.findButtonWithText(GlobalValues.DOB_VERIFICATION_BTN).click();
+		FrameworkUtility.findButtonWithText(
+				TestManager.appProperties.getProperty("agent_page_dob_verification_btn_text"))
+				.click();
+		MobileElement toast = AppCommon.waitForToast(null, GlobalValues.TOAST_MAX_WAIT_DURATION);
+		String toastText = toast.getText();
 
-		// Remove below sleep time once the validation is added.
+		if (toastText.toLowerCase().contains("error")) {
+			
+			System.out.println(
+					"Completed ADDRESS Verification: AgentDesktop API returned Error, Status........ : FAILED");
+			Assert.assertTrue(false, "Error: Desktop Agent returned :" + toastText);
+
+		} else {
+			
+		}
 		Thread.sleep(3000);
+		
 		System.out.println("Completed DOB Verification.......................... SUCCESS : END");
 
 	}
@@ -176,37 +186,76 @@ public class FunctionalTestSuite_android {
 		registerMobilenumber();
 		AppCommon.switchToAgentView();
 
-		FrameworkUtility.findButtonWithText(GlobalValues.FRAUD_NOTIFICATION_BTN).click();
-		errorToast = FrameworkUtility.verifyToastText(GlobalValues.ToastError, GlobalValues.TOAST_MAX_WAIT_DURATION);
-		if (errorToast == false) {
-	
-		} else {
-			// asserting again to false just to inform testng that this case is failed.
-			System.out.println(
-					"Completed FRAUD NOTIFICATION Verification: AgentDesktop API ereturned Error, Status........ : FAILED");
-			Assert.assertEquals(errorToast, false);
-		}
+//		FrameworkUtility.findButtonWithText(GlobalValues.FRAUD_NOTIFICATION_BTN).click();
+		FrameworkUtility.findButtonWithText(
+				TestManager.appProperties.getProperty("agent_page_fraud_verification_btn_text"))
+				.click();
+//		MobileElement toast = AppCommon.waitForToast(null, GlobalValues.TOAST_MAX_WAIT_DURATION);
+//		String toastText = toast.getText();
 
-		// Remove below sleep time once the validation is added.
+//		if (toastText.toLowerCase().contains("error")) {
+//			
+//			System.out.println(
+//					"Completed ADDRESS Verification: AgentDesktop API returned Error, Status........ : FAILED");
+//			Assert.assertTrue(false, "Error: Desktop Agent returned :" + toastText);
+//
+//		} else {
+//			
+//		}
+//		MobileElement elem = AppCommon.waitForPopUpwithID("ai.journey.k2bank:id/radioGroup", 10);
+		FrameworkUtility.AddDelay(10000);
+		FrameworkUtility.findElementById(TestManager.appProperties.getProperty("fraud_notification_radio_dont_call_id")).click();
+		
+		
 
 		System.out.println("Completed FRAUD NOTIFICATION Verification.......................... SUCCESS : END");
 
 	}
 
-//	@Test
+	@Test
 	public void verifyOutBoundCall() throws InterruptedException {
+
+//		AppCommon.switchToAgentView();
+//		System.out.println("In outbound call................");
+//		FrameworkUtility.findButtonWithText(
+//				TestManager.appProperties.getProperty("agent_page_outboundcall_verification_btn_text")).click();
+//		System.out.println("waiting to receive incoming call for 20 secs................");
+//		
+//
+//
+////		FrameworkUtility.AddDelay(20000);
 //		WebDriverWait wait = new WebDriverWait(TestManager.driver, 120);
 //
 //		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("com.android.dialer:id/op_name")));
 //		TestManager.driver.findElement(By.id("com.android.dialer:id/touch_view")).sendKeys("0.1");
+		registerMobilenumber();
+		AppCommon.switchToAgentView();
+		System.out.println("In outbound call................");
+		FrameworkUtility.findButtonWithText(
+				TestManager.appProperties.getProperty("agent_page_outboundcall_verification_btn_text")).click();
+		System.out.println("waiting to receive incoming call for 120 secs................");
+		((AndroidDriver) TestManager.driver).openNotifications();
+
+
+//		FrameworkUtility.AddDelay(20000);
+		WebDriverWait wait = new WebDriverWait(TestManager.driver, 120);
+		
+		MobileElement element = (MobileElement) wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("com.android.dialer:id/action0")));
+		
+		Assert.assertNotEquals(element,null, "Incoming call isnot received");
+		
+		element.click();
+		
 	}
-	
-	@Test
+
+	@AfterSuite
 	public void verifyzResetDesktopAgent() throws InterruptedException {
 		System.out.println("Reset Desktop Agent and Register mobile again............................. : START");
 		AppCommon.switchToAgentView();
-
-		FrameworkUtility.findElementById("ai.journey.k2bank:id/reset").click();
+		FrameworkUtility.findElementById(
+				TestManager.appProperties.getProperty("agent_page_reset_agent_btn_id"))
+				.click();
+		
 		FrameworkUtility.AddDelay(500);
 //			registerMobilenumber();
 		System.out.println("Reset Desktop Agent and Register mobile again............................. : END");

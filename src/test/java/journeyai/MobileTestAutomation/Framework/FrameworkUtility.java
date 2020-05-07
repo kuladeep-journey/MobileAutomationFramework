@@ -14,15 +14,21 @@ import io.appium.java_client.MobileElement;
 public class FrameworkUtility {
 
 	public static void initAppiumDriver(String pltform) {
+
 		TestManager tm = new TestManager();
+
 		try {
+
 			tm.InitDriver(pltform);
+
 		} catch (IOException e) {
+
 			System.out.println(e.toString());
 		}
 	}
 
 	public static int getDefaultFWSleepTime() {
+
 		return Integer.valueOf(TestManager.globalParams.getProperty("defaultsleeptime"));
 	}
 
@@ -33,11 +39,15 @@ public class FrameworkUtility {
 		MobileElement element;
 
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//android.widget.Toast")));
+
 		String txt = TestManager.driver.findElement(By.xpath("//android.widget.Toast")).getText().toLowerCase();
-		System.out.printf(" \n Expected Text : %s \n", expectedText);
-		System.out.printf("\n Actual Text : %s \n", txt);
+
+		System.out.printf(" \n Expected Toast : %s \n", expectedText);
+
+		System.out.printf("\n Actual Toast : %s \n", txt);
 
 		if (txt.contains(expectedText.toLowerCase())) {
+
 			return true;
 		}
 
@@ -61,14 +71,18 @@ public class FrameworkUtility {
 		MobileElement element = null;
 
 		if (maxWaitSeconds == 0) {
+
 			maxWaitSeconds = FrameworkUtility.getDefaultFWSleepTime();
 		}
 
 		if (id != null) {
+
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.id(id)));
 
 			element = TestManager.driver.findElement(By.id(id));
+
 		} else if (xPath != null) {
+
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xPath)));
 
 			element = TestManager.driver.findElement(By.xpath(xPath));
@@ -86,9 +100,12 @@ public class FrameworkUtility {
 	 */
 	public static void AddDelay(int milliSec) {
 		if (milliSec == 0) {
+
 			milliSec = getDefaultFWSleepTime();
 		}
+
 		try {
+
 			Thread.sleep(milliSec);
 		} catch (InterruptedException e) {
 			System.out.println(e);
@@ -104,11 +121,16 @@ public class FrameworkUtility {
 	 * 
 	 */
 	public static MobileElement findButtonWithText(String btnText) {
+
 		if (TestManager.platform.equalsIgnoreCase("android")) {
+
 			btnText = "//android.widget.Button[@text= \"" + btnText + "\"]";
+
 		} else if (TestManager.platform.equalsIgnoreCase("ios")) {
+
 			btnText = "//XCUIElementTypeButton[@name= \"" + btnText + "\"]";
 		}
+
 		return findElementByXpath(btnText);
 	}
 
@@ -118,6 +140,7 @@ public class FrameworkUtility {
 	 * 
 	 */
 	public static MobileElement findElementByXpath(String xPath) {
+
 		return TestManager.driver.findElement(By.xpath(xPath));
 	}
 
@@ -129,7 +152,7 @@ public class FrameworkUtility {
 	 * 
 	 */
 	public static MobileElement findElementById(String id) {
-		System.out.println("In find element by id/accessibility ID ............" + id);
+
 		return (MobileElement) TestManager.driver.findElement(By.id(id));
 	}
 
@@ -142,18 +165,27 @@ public class FrameworkUtility {
 	 */
 	public static List<MobileElement> findElementsWithClassNameAndText(String elemText, String elemClass,
 			boolean caseSensitive) {
+
 		List<MobileElement> elemList = TestManager.driver.findElements(By.className(elemClass));
+
 		for (int i = 0; i < elemList.size(); i++) {
+
 			if (caseSensitive) {
+
 				if (!elemText.equals(elemList.get(i).getText())) {
+
 					elemList.remove(i);
 				}
+
 			} else {
+
 				if (!elemText.equalsIgnoreCase(elemList.get(i).getText())) {
+
 					elemList.remove(i);
 				}
 			}
 		}
+
 		return elemList;
 	}
 
@@ -166,17 +198,19 @@ public class FrameworkUtility {
 	 */
 
 	public static List<MobileElement> findAllElementsWithText(String elemText, boolean caseSensitive) {
+
 		List<MobileElement> elemList = TestManager.driver
 				.findElements(By.xpath("//*[contains(@text, " + "\'" + elemText + "\'"));
+
 		for (int i = 0; i < elemList.size(); i++) {
+
 			if (caseSensitive) {
+
 				if (!elemText.equals(elemList.get(i).getText())) {
+
 					elemList.remove(i);
 				}
-			} /*
-				 * else { if (!elemText.equalsIgnoreCase(elemList.get(i).getText())) {
-				 * elemList.remove(i); } }
-				 */
+			}
 		}
 		return elemList;
 	}
@@ -190,16 +224,18 @@ public class FrameworkUtility {
 	 * Return: MobileElement matching the elementType and value
 	 */
 	public static MobileElement findElementWithValue(String elementType, String value) {
+
 		String path = null;
 
 		if (TestManager.platform.equalsIgnoreCase("ios")) {
+
 			path = "//" + elementType + "[@value=\"" + value + "\"]";
 
 		} else if (TestManager.platform.equalsIgnoreCase("android")) {
+
 			path = "//" + elementType + "[@text=\"" + value + "\"]";
 		}
 
 		return TestManager.driver.findElement(By.xpath(path));
 	}
-
 }

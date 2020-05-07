@@ -84,8 +84,6 @@ public class TestManager {
 
 	public void createiosDriver() throws IOException {
 
-		System.out.println("This part of iOS automation is pending ...!!!");
-
 		driver = CreateTestDriver.IOSCapabilities();
 		
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);

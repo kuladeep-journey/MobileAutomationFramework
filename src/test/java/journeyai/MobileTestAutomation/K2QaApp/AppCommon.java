@@ -17,18 +17,17 @@ import journeyai.MobileTestAutomation.K2QaApp.GlobalValues;
 
 public class AppCommon {
 
-	
-	
-
 	// This method will switch to SDK view on mobile app
 	public static void switchToSDKView() {
 
 		if (TestManager.platform.equalsIgnoreCase("android")) {
-			FrameworkUtility.findElementById(
-					TestManager.appProperties.getProperty("sdk_tab_page_id"))
-					.click();
+
+			FrameworkUtility.findElementById(TestManager.appProperties.getProperty("sdk_tab_page_id")).click();
+
 		} else if (TestManager.platform.equalsIgnoreCase("ios")) {
+
 			FrameworkUtility.findElementById("Bank").click();
+
 		}
 		FrameworkUtility.AddDelay(1000);
 
@@ -36,15 +35,18 @@ public class AppCommon {
 
 	// This method will switch to Desktop Agent view on mobile app
 	public static void switchToAgentView() {
-		
+
 //		TestManager.driver.findElement(By.id("ai.journey.k2bank:id/navigation_dashboard")).click();
-		if (TestManager.platform.equalsIgnoreCase("android" )) {
-			FrameworkUtility.findElementById(
-					TestManager.appProperties.getProperty("agent_tab_page_id"))
-					.click();
-		} else if (TestManager.platform.equalsIgnoreCase("ios" )) {
+		if (TestManager.platform.equalsIgnoreCase("android")) {
+
+			FrameworkUtility.findElementById(TestManager.appProperties.getProperty("agent_tab_page_id")).click();
+
+		} else if (TestManager.platform.equalsIgnoreCase("ios")) {
+
 			FrameworkUtility.findElementById("Agent").click();
+
 		}
+
 		FrameworkUtility.AddDelay(1000);
 
 	}
@@ -52,64 +54,76 @@ public class AppCommon {
 	// This method will switch to Settings view on mobile app
 	public static void switchToSettingsView() {
 //		TestManager.driver.findElement(By.id("ai.journey.k2bank:id/navigation_settings")).click();
-		if (TestManager.platform.equalsIgnoreCase("android" )) {
-			FrameworkUtility.findElementById(
-					TestManager.appProperties.getProperty("settings_tab_page_id"))
-					.click();
-		} else if (TestManager.platform.equalsIgnoreCase("ios" )) {
+		if (TestManager.platform.equalsIgnoreCase("android")) {
+
+			FrameworkUtility.findElementById(TestManager.appProperties.getProperty("settings_tab_page_id")).click();
+
+		} else if (TestManager.platform.equalsIgnoreCase("ios")) {
+
 			FrameworkUtility.findElementById("Settings").click();
+
 		}
+
 		FrameworkUtility.AddDelay(1000);
 
 	}
 
-	public static String getToastText(MobileElement elem){
+	public static String getToastText(MobileElement elem) {
 		return elem.getText();
 	}
 
-	
 	public static MobileElement waitForToast(String toastXpath, int maxWaitSeconds) {
-		
+
 		if (maxWaitSeconds == 0) {
 			maxWaitSeconds = FrameworkUtility.getDefaultFWSleepTime();
 		}
-		if (toastXpath == null ) {
-			if( TestManager.platform.equalsIgnoreCase("android")) {
-				toastXpath = TestManager.appProperties.getProperty("toast_xpath");	
-			} else if ( TestManager.platform.equalsIgnoreCase("ios")) {
+		if (toastXpath == null) {
+
+			if (TestManager.platform.equalsIgnoreCase("android")) {
+
+				toastXpath = TestManager.appProperties.getProperty("toast_xpath");
+
+			} else if (TestManager.platform.equalsIgnoreCase("ios")) {
+
 				toastXpath = "//XCUIElementTypeStaticText[@name=\"Toast\"]"; // //XCUIElementTypeWindow[@name=\"Toast\"]";
+
 			}
 		}
-		
+
 		WebDriverWait wait = new WebDriverWait(TestManager.driver, maxWaitSeconds);
 
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(toastXpath)));
-		
+
 		return FrameworkUtility.findElementByXpath(toastXpath);
 	}
 
-
 	public static boolean waitForPopUpwithID(String popupId, int maxWaitSeconds) {
+		
 		String expectedTxt = "Bank is requesting you verify";
+		
 		if (maxWaitSeconds == 0) {
+		
 			maxWaitSeconds = 10;
 		}
 		WebDriverWait wait = new WebDriverWait(TestManager.driver, maxWaitSeconds);
 
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(popupId)));
-		TestManager.driver.findElement(By.id(
-				TestManager.appProperties.getProperty("verification_push_notification_desc_Id")))
+
+		TestManager.driver
+				.findElement(By.id(TestManager.appProperties.getProperty("verification_push_notification_desc_Id")))
 				.getText().toLowerCase();
+
 		String txt = TestManager.driver.findElement(By.id("ai.journey.k2bank:id/dialogDesc")).getText().toLowerCase();
+
 		System.out.printf(" \n Expected Text : %s \n", expectedTxt);
 		System.out.printf("\n Actual Text : %s \n", txt);
 
 		if (txt.contains(expectedTxt.toLowerCase())) {
+			
 			return true;
 		}
+		
 		return false;
 	}
-
-
 
 }

@@ -5,17 +5,21 @@ import io.appium.java_client.MobileElement;
 import journeyai.MobileTestAutomation.Framework.FrameworkUtility;
 
 public class LoginPage {
+	
 	public MobileElement LoginButton;
 
 	public LoginPage() {
+		
 		initElements();
 	}
 
 	public void initElements() {
-		LoginButton = FrameworkUtility.findElementByXpath("//android.widget.TextView[@text=\"Login\"]");
+		
+//		LoginButton = FrameworkUtility.findElementByXpath("//android.widget.TextView[@text=\"Login\"]");
 	}
 	
 	public boolean isLoginPage() {
+		
 		return LoginButton.isDisplayed();
 	}
 

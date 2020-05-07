@@ -32,64 +32,75 @@ public class TestManager {
 	public static Properties appProperties = new Properties();
 
 	public static void setFWGlobalVariable(String key, String value) {
+		
 		TestManager.globalParams.setProperty(key, value);
-		System.out.println("\n Property key : " + key + " - \t property value: " +TestManager.globalParams.getProperty(key));
+		
+		System.out.println(
+				"\n Property key : " + key + " - \t property value: " + TestManager.globalParams.getProperty(key));
 	}
 
 	public static void setAppGlobalVariable(String propName, String propValue) {
+		
 		TestManager.appProperties.setProperty(propName, propValue);
-		System.out.println("\n Property key : " + propName + " - \t property value: " +TestManager.appProperties.getProperty(propName));
+		
+		System.out.println("\n Property key : " + propName + " - \t property value: "
+				+ TestManager.appProperties.getProperty(propName));
 	}
 
 	public void CreateDriver() throws IOException {
+		
 		readGlobalValues();
-
-//		String platform = "Android";
+		
+		System.out.println("Create Driver ..................... : START");
+		
 		if (driver == null) {
-			System.out.println("Create Driver ..................... : START");
 
 			// check platform and create corresponding driver
 
 			if (platform.equalsIgnoreCase("android")) {
+				
 				createAndroidDriver();
+				
 			} else if (platform.equalsIgnoreCase("ios")) {
+				
 				createiosDriver();
+				
 			}
-//			else if (platform.equals("")) {
-//					if (this.globalParams.getProperty("platform_under_test").equalsIgnoreCase("android")) {
-//						platform = "android"; 
-//					} else if (this.globalParams.getProperty("platform_under_test").equalsIgnoreCase("ios")) {
-//						platform = "ios"; 
-//					}	
-//			}
+
 			System.out.println("Create Driver ..................... : END");
+
 		}
+		
 		return;
 	}
 
 	public void createAndroidDriver() throws IOException {
+		
 		driver = CreateTestDriver.AndroidCapabilities();
+		
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-//		driver = andydriver;
+		
 	}
 
 	public void createiosDriver() throws IOException {
-		// Create IOS driver using Appium
+
 		System.out.println("This part of iOS automation is pending ...!!!");
+
 		driver = CreateTestDriver.IOSCapabilities();
+		
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-//		driver = iosdriver;
+
 	}
 
+	// read from global.properties and store in key value pairs /define variables
+
 	public void readGlobalValues() {
-		// read from global.properties and store in key value pairs /define variables
-		// for corresponding key/values
-		// fill value for K2BankUrl/CentraalURL/K2CMURL
+
 		if (globalValsInitialized) {
 			return;
 		}
 
-		System.out.println("***************************************" + TestManager.platform);
+		// This is intentionally hard coded***
 		String automationPath = "src/test/java/journeyai/MobileTestAutomation/";
 
 		File readGlobalValuesFile = new File(automationPath + "Framework/FrameworkGlobal.properties");
@@ -98,91 +109,162 @@ public class TestManager {
 				readGlobalValuesFile.getAbsolutePath());
 
 		FileInputStream fileInput = null;
+		
 		try {
+		
 			fileInput = new FileInputStream(readGlobalValuesFile);
+		
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		
 		try {
+			
 			globalParams.load(fileInput);
+		
 			fileInput.close();
+		
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		globalParams.setProperty("rootPath", automationPath);
+		
 		globalParams.setProperty("appUnderTestPath", automationPath + TestManager.appFolderName);
-		globalParams.setProperty("apkPath",
-				automationPath + TestManager.appFolderName + "/appsUnderTest/");
+		
+		globalParams.setProperty("apkPath", automationPath + TestManager.appFolderName + "/appsUnderTest/");
 
 		globalValsInitialized = true;
+		
 		ReadAppProperties();
+		
 	}
 
 	public void ReadAppProperties() {
+		
 		String propFile = globalParams.getProperty("appUnderTestPath") + "/" + platform + "_resources.properties";
+		
 		System.out.println("app properties file : " + propFile);
 		// Now add the app properties to Global framework properties
 		File readAppProps = new File(propFile);
+		
 		FileInputStream fileInput = null;
+		
 		try {
+			
 			fileInput = new FileInputStream(readAppProps);
+			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		try {
+			
 			appProperties.load(fileInput);
+			
 			fileInput.close();
+		
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		
-		
+	}
 
+	/*
+	 * This method will set the execution platform, this is mandatory to create
+	 * platform specific driver
+	 */
+	public static void setPlatform(String execPlatform) {
+		
+		platform = execPlatform;
+	}
+
+	public static String getPlatform() {
+		
+		return platform;
+	}
+
+	/*
+	 * This method will set the App under test automation folder
+	 * 
+	 */
+	public static void setAppUnderTestFolderName(String appFolder) {
+
+		appFolderName = appFolder;
+	}
+
+	public static String getAppUnderTestFolderName(String appFolder) {
+
+		return appFolderName;
 	}
 	
+	/*
+	 * This method will set the Apk or ipa file name to install and test on mobile
+	 * 
+	 */
+	public static void setapkIpaName(String fileName) {
+
+		apkIpaName = fileName;
+	}
+
+	public static String getapkIpaName() {
+
+		return apkIpaName;
+	}
+
 	public static void printglobalValues() {
 		// Print all the key values to console
-				System.out.println(
-						"----------------------------------------------------------------------------------------------\n");
-				System.out.println(
-						"-----------------------------GLOBAL VARIABLES / CONFIG PARAMS---------------------------------\n");
-				System.out.println(
-						"----------------------------------------------------------------------------------------------\n");
-		System.out.println("==========================FW GLOBAL PROPERTIES==================================");
+		System.out.println(
+				"----------------------------------------------------------------------------------------------\n");
+		System.out.println(
+				"-----------------------------GLOBAL VARIABLES / CONFIG PARAMS---------------------------------\n");
+		System.out.println(
+				"----------------------------------------------------------------------------------------------\n");
+		System.out.println(
+				"==================================FW GLOBAL PROPERTIES=========================================\n");
+		
 		Enumeration KeyValues = globalParams.keys();
+		
 		while (KeyValues.hasMoreElements()) {
+			
 			String key = (String) KeyValues.nextElement();
 			String value = globalParams.getProperty(key);
 			System.out.println(key + "   -    " + value);
+			
 		}
-		
+
 		System.out.println("==========================APP GLOBAL PROPERTIES=================================");
-		
+
 		KeyValues = appProperties.keys();
 		while (KeyValues.hasMoreElements()) {
 			String key = (String) KeyValues.nextElement();
 			String value = appProperties.getProperty(key);
 			System.out.println(key + "   -    " + value);
 		}
+		
 		System.out.println("================================================================================");
 	}
 
 	@Parameters({ "platform" })
 	@BeforeSuite
 	public void InitDriver(String testPlatform) throws IOException {
+		
 		System.out.println("\n Before Suite: .... : START");
+		
 		platform = testPlatform;
+		
 		CreateDriver();
+		
 		System.out.println("\n Before Suite: .... : END");
 	}
 
 	@AfterSuite
 	public void closeDriver() {
+		
 		System.out.println("After Suite: ....!!!!");
+		
 		System.out.println("Completed the test suite, thus closing app and driver");
+		
 		driver.close();
 	}
 

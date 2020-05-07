@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Suite">
+<suite name="JourneyE2ETestSuite">
 	<parameter name="platform" value="ios" />
 	<parameter name="appFolderName" value="K2QaApp" />
 	<parameter name="phoneNumber" value="+919538243666" />
-	<parameter name="apkIpaName" value="JourneyQA_app.zip"/>
-		<test thread-count="5" name="Test">
+	<parameter name="apkIpaName" value="JourneyQA_app.zip" />
+
+	<test thread-count="5" name="SDKIntegratedApp">
 		<classes>
 			<class
 				name="journeyai.MobileTestAutomation.K2QaApp.FunctionalTestSuite_iOS" />

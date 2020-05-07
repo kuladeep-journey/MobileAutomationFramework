@@ -24,23 +24,28 @@ public class FunctionalTestSuite_android {
 
 	boolean registered = false;
 
-	@Parameters({ "platform", "appFolderName" , "phoneNumber" , "apkIpaName"})
-	public FunctionalTestSuite_android(@Optional("android") String platform, String appFolder, String phoneNum, String apkIpa) {
-		
-		TestManager.platform = platform;
-		TestManager.appFolderName = appFolder;
-		TestManager.apkIpaName = apkIpa;
+	@Parameters({ "platform", "appFolderName", "phoneNumber", "apkIpaName" })
+	public FunctionalTestSuite_android(@Optional("android") String platform, String appFolder, String phoneNum,
+			String apkIpa) {
+
+		TestManager.setPlatform(platform);
+
+		TestManager.setAppUnderTestFolderName(appFolder);
+
+		TestManager.setapkIpaName(apkIpa);
 
 		FrameworkUtility.initAppiumDriver(platform);
+
 		TestManager.setAppGlobalVariable("phonenumber", phoneNum);
-				
+
 		TestManager.printglobalValues();
-		
+
 		FrameworkUtility.AddDelay(2000);
 	}
 
 	@BeforeMethod
 	public void addDelay() {
+
 		FrameworkUtility.AddDelay(2000);
 
 	}
@@ -49,7 +54,9 @@ public class FunctionalTestSuite_android {
 	public void registerMobilenumber() throws InterruptedException {
 
 		if (registered) {
+
 			System.out.println("Mobile number already registered, Thus not registering again, but skipping this step ");
+
 			return;
 		}
 
@@ -83,14 +90,18 @@ public class FunctionalTestSuite_android {
 	public void verifyAddress() throws InterruptedException {
 		System.out.println("In ADDRESS Verification............................. : START");
 		boolean errorToast = false;
+
+//		Register mobile number if not registered already (this methods works like a singleton)
 		registerMobilenumber();
+
 		AppCommon.switchToAgentView();
 
-		FrameworkUtility.findButtonWithText(
-				TestManager.appProperties.getProperty("agent_page_address_verification_btn_text"))
+		FrameworkUtility
+				.findButtonWithText(TestManager.appProperties.getProperty("agent_page_address_verification_btn_text"))
 				.click();
 
 		MobileElement toast = AppCommon.waitForToast(null, GlobalValues.TOAST_MAX_WAIT_DURATION);
+
 		String toastText = toast.getText();
 
 		if (toastText.toLowerCase().contains(TestManager.appProperties.getProperty("toast_text_error"))) {
@@ -99,28 +110,34 @@ public class FunctionalTestSuite_android {
 			// asserting again to false just to inform testng that this case is failed.
 			System.out.println(
 					"Completed ADDRESS Verification: AgentDesktop API returned Error, Status........ : FAILED");
+
 			Assert.assertTrue(false, "Error: Desktop Agent returned :" + toastText);
 
 		} else {
+
 			Assert.assertEquals(AppCommon.waitForPopUpwithID(
-					TestManager.appProperties.getProperty("verification_push_notification_desc_Id"),0),
-					true);
+					TestManager.appProperties.getProperty("verification_push_notification_desc_Id"), 0), true);
+
 			FrameworkUtility.AddDelay(1000);
-			FrameworkUtility.findElementById(
-					TestManager.appProperties.getProperty("push_notification_address_input"))
+
+			FrameworkUtility.findElementById(TestManager.appProperties.getProperty("push_notification_address_input"))
 					.sendKeys(TestManager.appProperties.getProperty("push_notification_address_to_enter"));
+
 			FrameworkUtility.AddDelay(1000);
-			FrameworkUtility.findElementById(
-					TestManager.appProperties.getProperty("push_notification_verify_btn_id"))
+
+			FrameworkUtility.findElementById(TestManager.appProperties.getProperty("push_notification_verify_btn_id"))
 					.click();
+
 			FrameworkUtility.AddDelay(1000);
+
 			Assert.assertEquals(
-					FrameworkUtility.verifyToastText(
-							TestManager.appProperties.getProperty("toast_text_success"), 
-							GlobalValues.TOAST_MAX_WAIT_DURATION), true);
-			
+					FrameworkUtility.verifyToastText(TestManager.appProperties.getProperty("toast_text_success"),
+							GlobalValues.TOAST_MAX_WAIT_DURATION),
+					true);
+
 			FrameworkUtility.AddDelay(GlobalValues.DEFAULT_DELAY_MILLISEC);
 		}
+
 		System.out.println("Completed ADDRESS Verification............................. SUCCESS : END");
 
 	}
@@ -129,15 +146,18 @@ public class FunctionalTestSuite_android {
 	public void verifySsn() throws InterruptedException {
 		System.out.println("In SSN Verification..........................: START");
 		boolean errorToast = false;
+//		Register mobile number if not registered already (this methods works like a singleton)
 		registerMobilenumber();
+
 		AppCommon.switchToAgentView();
 
 //		FrameworkUtility.findButtonWithText(GlobalValues.SSN_VERIFICATION_BTN).click();
-		FrameworkUtility.findButtonWithText(
-				TestManager.appProperties.getProperty("agent_page_ssn_verification_btn_text"))
+		FrameworkUtility
+				.findButtonWithText(TestManager.appProperties.getProperty("agent_page_ssn_verification_btn_text"))
 				.click();
 
 		MobileElement toast = AppCommon.waitForToast(null, GlobalValues.TOAST_MAX_WAIT_DURATION);
+
 		String toastText = toast.getText();
 
 		if (toastText.toLowerCase().contains("error")) {
@@ -146,12 +166,13 @@ public class FunctionalTestSuite_android {
 			// asserting again to false just to inform testng that this case is failed.
 			System.out.println(
 					"Completed ADDRESS Verification: AgentDesktop API returned Error, Status........ : FAILED");
+
 			Assert.assertTrue(false, "Error: Desktop Agent returned :" + toastText);
 
 		} else {
 
 		}
-		Thread.sleep(3000);
+
 		System.out.println("Completed SSN Verification.......................... SUCCESS : END");
 
 	}
@@ -160,27 +181,32 @@ public class FunctionalTestSuite_android {
 	public void verifyDob() throws InterruptedException {
 		System.out.println("In DOB Verification..........................: START");
 		boolean errorToast = false;
+
+//		Register mobile number if not registered already (this methods works like a singleton)
 		registerMobilenumber();
+
 		AppCommon.switchToAgentView();
 
 //		FrameworkUtility.findButtonWithText(GlobalValues.DOB_VERIFICATION_BTN).click();
-		FrameworkUtility.findButtonWithText(
-				TestManager.appProperties.getProperty("agent_page_dob_verification_btn_text"))
+		FrameworkUtility
+				.findButtonWithText(TestManager.appProperties.getProperty("agent_page_dob_verification_btn_text"))
 				.click();
+
 		MobileElement toast = AppCommon.waitForToast(null, GlobalValues.TOAST_MAX_WAIT_DURATION);
+
 		String toastText = toast.getText();
 
 		if (toastText.toLowerCase().contains("error")) {
-			
+
 			System.out.println(
 					"Completed ADDRESS Verification: AgentDesktop API returned Error, Status........ : FAILED");
+
 			Assert.assertTrue(false, "Error: Desktop Agent returned :" + toastText);
 
 		} else {
-			
+
 		}
-		Thread.sleep(3000);
-		
+
 		System.out.println("Completed DOB Verification.......................... SUCCESS : END");
 
 	}
@@ -189,13 +215,17 @@ public class FunctionalTestSuite_android {
 	public void verifyFraudNotification() throws InterruptedException {
 		System.out.println("In FRAUD NOTIFICATION Verification..........................: START");
 		boolean errorToast = false;
+
+//		Register mobile number if not registered already (this methods works like a singleton)
 		registerMobilenumber();
+
 		AppCommon.switchToAgentView();
 
 //		FrameworkUtility.findButtonWithText(GlobalValues.FRAUD_NOTIFICATION_BTN).click();
-		FrameworkUtility.findButtonWithText(
-				TestManager.appProperties.getProperty("agent_page_fraud_verification_btn_text"))
+		FrameworkUtility
+				.findButtonWithText(TestManager.appProperties.getProperty("agent_page_fraud_verification_btn_text"))
 				.click();
+
 //		MobileElement toast = AppCommon.waitForToast(null, GlobalValues.TOAST_MAX_WAIT_DURATION);
 //		String toastText = toast.getText();
 
@@ -210,9 +240,9 @@ public class FunctionalTestSuite_android {
 //		}
 //		MobileElement elem = AppCommon.waitForPopUpwithID("ai.journey.k2bank:id/radioGroup", 10);
 		FrameworkUtility.AddDelay(10000);
-		FrameworkUtility.findElementById(TestManager.appProperties.getProperty("fraud_notification_radio_dont_call_id")).click();
-		
-		
+
+		FrameworkUtility.findElementById(TestManager.appProperties.getProperty("fraud_notification_radio_dont_call_id"))
+				.click();
 
 		System.out.println("Completed FRAUD NOTIFICATION Verification.......................... SUCCESS : END");
 
@@ -221,49 +251,46 @@ public class FunctionalTestSuite_android {
 	@Test
 	public void verifyOutBoundCall() throws InterruptedException {
 
-//		AppCommon.switchToAgentView();
-//		System.out.println("In outbound call................");
-//		FrameworkUtility.findButtonWithText(
-//				TestManager.appProperties.getProperty("agent_page_outboundcall_verification_btn_text")).click();
-//		System.out.println("waiting to receive incoming call for 20 secs................");
-//		
-//
-//
-////		FrameworkUtility.AddDelay(20000);
-//		WebDriverWait wait = new WebDriverWait(TestManager.driver, 120);
-//
-//		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("com.android.dialer:id/op_name")));
-//		TestManager.driver.findElement(By.id("com.android.dialer:id/touch_view")).sendKeys("0.1");
+//		Register mobile number if not registered already (this methods works like a singleton)
 		registerMobilenumber();
+
 		AppCommon.switchToAgentView();
+
 		System.out.println("In outbound call................");
+
 		FrameworkUtility.findButtonWithText(
 				TestManager.appProperties.getProperty("agent_page_outboundcall_verification_btn_text")).click();
-		System.out.println("waiting to receive incoming call for 120 secs................");
-		((AndroidDriver) TestManager.driver).openNotifications();
 
+		System.out.println("waiting to receive incoming call for 120 secs................");
+
+		((AndroidDriver) TestManager.driver).openNotifications();
 
 //		FrameworkUtility.AddDelay(20000);
 		WebDriverWait wait = new WebDriverWait(TestManager.driver, 20);
-		
-		MobileElement element = (MobileElement) wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("com.android.dialer:id/action0")));
-		
-		Assert.assertNotEquals(element,null, "Incoming call isnot received");
-		
+
+		MobileElement element = (MobileElement) wait
+				.until(ExpectedConditions.visibilityOfElementLocated(By.id("com.android.dialer:id/action0")));
+
+		Assert.assertNotEquals(element, null, "Incoming call isnot received");
+
 		element.click();
-		
+
 	}
 
 	@AfterSuite
 	public void verifyzResetDesktopAgent() throws InterruptedException {
+
 		System.out.println("Reset Desktop Agent and Register mobile again............................. : START");
+
 		AppCommon.switchToAgentView();
-		FrameworkUtility.findElementById(
-				TestManager.appProperties.getProperty("agent_page_reset_agent_btn_id"))
+
+		FrameworkUtility.findElementById(TestManager.appProperties.getProperty("agent_page_reset_agent_btn_id"))
 				.click();
-		
+
 		FrameworkUtility.AddDelay(500);
 //			registerMobilenumber();
+
 		System.out.println("Reset Desktop Agent and Register mobile again............................. : END");
+
 	}
 }

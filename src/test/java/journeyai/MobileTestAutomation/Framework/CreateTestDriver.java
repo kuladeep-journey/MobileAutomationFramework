@@ -39,7 +39,8 @@ public class CreateTestDriver {
 		cap.setCapability(MobileCapabilityType.DEVICE_NAME, TestManager.globalParams.get("androiddevicename"));
 		cap.setCapability(MobileCapabilityType.AUTOMATION_NAME, TestManager.globalParams.get("androidautomationname"));
 		cap.setCapability(MobileCapabilityType.APP, apkFile.getAbsolutePath());
-		cap.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, TestManager.globalParams.get("appiumcommandtimeout"));
+		cap.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT,
+				TestManager.globalParams.get("appiumcommandtimeout"));
 		AndroidDriver<MobileElement> driver = new AndroidDriver<MobileElement>(
 				new URL(TestManager.globalParams.getProperty("appiumserverurl")), cap);
 
@@ -48,7 +49,6 @@ public class CreateTestDriver {
 
 	public static IOSDriver<MobileElement> IOSCapabilities() throws IOException {
 
-		
 		System.out.printf("creating driver for platform : IOS");
 
 		File currentRoot = new File(System.getProperty("user.dir"));
@@ -65,12 +65,11 @@ public class CreateTestDriver {
 		d.setCapability(MobileCapabilityType.AUTOMATION_NAME, AutomationName.IOS_XCUI_TEST);
 		d.setCapability(MobileCapabilityType.APP, iosAppFile.getAbsolutePath());
 
-		IOSDriver<MobileElement> driver = new IOSDriver <MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"),d);
+		IOSDriver<MobileElement> driver = new IOSDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"), d);
 
-		
 		System.out.println("------------------------------ Automation Name : " + driver.getCapabilities());
-	
-			return driver;
+
+		return driver;
 
 	}
 

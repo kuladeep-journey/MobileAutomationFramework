@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Suite">
+<suite name="JourneyE2ETestSuite">
 	<parameter name="platform" value="android" />
 	<parameter name="appFolderName" value="K2QaApp" />
 	<parameter name="phoneNumber" value="+919538243666" />
-	<parameter name="apkIpaName" value="MobileAgent_v1.0.10_debug_05-05-2020.apk"/>
+	<parameter name="apkIpaName"
+		value="MobileAgent_v1.0.10_debug_05-05-2020.apk" />
 	<!-- <parameter name="appExeName" value="MobileAgent_v1.0.10_debug_05-05-2020.apk"/> -->
-	<test thread-count="5" name="Test" preserve-order="true"  enabled="true">
+	<test thread-count="5" name="SDKIntegratedApp"
+		preserve-order="true" enabled="true">
 		<classes>
-			<class name="journeyai.MobileTestAutomation.K2QaApp.FunctionalTestSuite_android" />
-			<!-- <methods>
-				<include name="registerMobilenumber" />
-				<include name="verifyOutBoundCall" />
-				<include name="verifyAddress" />
-			</methods>
-			</class> -->
+			<class
+				name="journeyai.MobileTestAutomation.K2QaApp.FunctionalTestSuite_android" />
+			<!-- <methods> <include name="registerMobilenumber" /> <include name="verifyOutBoundCall" 
+				/> <include name="verifyAddress" /> </methods> </class> -->
 		</classes>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->

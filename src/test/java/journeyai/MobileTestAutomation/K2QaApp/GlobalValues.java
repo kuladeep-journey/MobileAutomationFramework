@@ -1,7 +1,5 @@
 package journeyai.MobileTestAutomation.K2QaApp;
 
-
-
 public class GlobalValues {
 	static String ToastSuccess = "SUCCESS";
 	static String ToastFailure = "FAILURE";
@@ -14,7 +12,6 @@ public class GlobalValues {
 	static int TOAST_MAX_WAIT_DURATION = 30;
 	static int PUSH_NOTIFICATION_MAX_WAIT_DURATION = 60;
 	static int DEFAULT_DELAY_MILLISEC = 5000;
-	
 
 	static String ADDRESS_VERIFICATION_BTN = "ADDRESS VERIFICATION";
 	static String ADDRESS_VERIFICATION_BTN_ID = "ai.journey.k2bank:id/addressVerifcation";
@@ -32,7 +29,7 @@ public class GlobalValues {
 
 	static String FRAUD_NOTIFICATION_BTN = "FRAUD NOTIFICATION";
 	static String FRAUD_NOTIFICATION_BTN_ID = "ai.journey.k2bank:id/fraudVerification";
-	
+
 	static String PopUpDescId = "ai.journey.k2bank:id/dialogDesc";
 
 	public static int ZeroWaitSec = 0;

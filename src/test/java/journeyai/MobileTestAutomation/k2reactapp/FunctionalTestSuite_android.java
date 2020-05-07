@@ -15,34 +15,36 @@ import org.testng.annotations.Parameters;
 public class FunctionalTestSuite_android {
 	
 	boolean registered = false;
-	LoginPage lp = new LoginPage();
+	
+	
 	@Parameters({ "platform", "appFolderName" , "phoneNumber" , "apkIpaName"})
 	public FunctionalTestSuite_android(@Optional("android") String platform, String appFolder, String phoneNum, String apkIpa) {
-		TestManager.platform = platform;
-		TestManager.appFolderName = appFolder;
-		TestManager.apkIpaName = apkIpa;
+		
+		TestManager.setPlatform(platform);
+
+		TestManager.setAppUnderTestFolderName(appFolder);
+
+		TestManager.setapkIpaName(apkIpa);
 		
 		FrameworkUtility.initAppiumDriver(platform);
+		
+		TestManager.setAppGlobalVariable("phonenumber", phoneNum);
+		
+		TestManager.printglobalValues();
+		
 		FrameworkUtility.AddDelay(2000);
 	}
 
 	@BeforeMethod
 	public void addDelay() {
-		FrameworkUtility.AddDelay(2000);
 		
+		FrameworkUtility.AddDelay(2000);	
 	}
 	
 	@Test
-	public void login() {
-		if (lp.isLoginPage()) {
-			lp.LoginButton.click();
-		}
+	public void onBoarding() {
 		
-	}
-
-	@Test
-	public void registerMobilenumber() throws InterruptedException {
-
+		
 	}
 
 }

@@ -15,6 +15,13 @@ Update TestManager parameters before creating driver:
 All properties related to framework/automation setup to execute properly, are framework params
 All properties which are only limited to the application under test are app global properties.
 
+In testng xml file of each app automation per platform, below parameters tobe added as mandatory : 
+	<parameter name="platform" value="<platform name android or ios>" />
+	<parameter name="appFolderName" value="app under test folder name" />
+	<parameter name="apkIpaName" value="apk or ipa/app file name"/>
+TODO: 
+Need to add parameter for device ID/Name under test Real device or simulator name etc.,
+
 Once implementation is done run below command to execute automation:
 
 $ cd <Project root folder>

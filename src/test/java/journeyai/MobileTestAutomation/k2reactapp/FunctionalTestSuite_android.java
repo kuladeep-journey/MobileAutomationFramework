@@ -16,9 +16,11 @@ public class FunctionalTestSuite_android {
 	
 	boolean registered = false;
 	LoginPage lp = new LoginPage();
-	@Parameters({ "platform" })
-	public FunctionalTestSuite_android(@Optional("android") String platform) {
+	@Parameters({ "platform", "appFolderName" , "phoneNumber" , "apkIpaName"})
+	public FunctionalTestSuite_android(@Optional("android") String platform, String appFolder, String phoneNum, String apkIpa) {
 		TestManager.platform = platform;
+		TestManager.appFolderName = appFolder;
+		TestManager.apkIpaName = apkIpa;
 		
 		FrameworkUtility.initAppiumDriver(platform);
 		FrameworkUtility.AddDelay(2000);

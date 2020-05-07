@@ -26,18 +26,22 @@ public class FunctionalTestSuite_iOS {
 
 	boolean registered = false;
 
-	@Parameters({ "platform"}) //, "phonenumber" })
-	public FunctionalTestSuite_iOS(@Optional("ios") String platform) { //, String phonenumber) {
+	@Parameters({ "platform", "appFolderName" , "phoneNumber" , "apkIpaName" })
+	public FunctionalTestSuite_iOS(@Optional("ios") String platform, String appFolder, String phoneNum, String apkIpa) {
 
 		TestManager.platform = platform;
-//		TestManager.appProperties.setProperty("phonenumber", phonenumber);
-		
-		FrameworkUtility.initAppiumDriver(platform);
-		FrameworkUtility.AddDelay(2000);
+		TestManager.appFolderName = appFolder;
+		TestManager.apkIpaName = apkIpa;
 
+		FrameworkUtility.initAppiumDriver(platform);
+		TestManager.setAppGlobalVariable("phonenumber", phoneNum);
+		
+		TestManager.printglobalValues();
+		
 		if (TestManager.platform.equalsIgnoreCase("ios")) {
 			TestManager.driver.findElement(By.xpath("//*[@name=\"Allow\"]")).click();
 		}
+		
 	}
 
 	@BeforeMethod

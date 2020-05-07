@@ -30,7 +30,7 @@ public class CreateTestDriver {
 
 		File androidAppLocation = new File(currentRoot, TestManager.globalParams.getProperty("apkPath"));
 		System.out.printf("\n\n.........APK file location : %s .......... \n\n", androidAppLocation.getAbsolutePath());
-		File apkFile = new File(androidAppLocation, TestManager.globalParams.getProperty("androidapp"));
+		File apkFile = new File(androidAppLocation, TestManager.apkIpaName);
 		System.out.printf("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! APK Absolute path :   %s !!!!!!!!!!! \n \n",
 				apkFile.getAbsolutePath());
 
@@ -54,9 +54,9 @@ public class CreateTestDriver {
 		File currentRoot = new File(System.getProperty("user.dir"));
 
 		File iosAppLocation = new File(currentRoot, TestManager.globalParams.getProperty("apkPath"));
-		System.out.printf("\n\n.........APK file location : %s .......... \n\n", iosAppLocation.getAbsolutePath());
-		File iosAppFile = new File(iosAppLocation, TestManager.globalParams.getProperty("iosapp"));
-		System.out.printf("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! APK Absolute path :   %s !!!!!!!!!!! \n \n",
+		System.out.printf("\n\n.........iOS APP file location : %s .......... \n\n", iosAppLocation.getAbsolutePath());
+		File iosAppFile = new File(iosAppLocation, TestManager.apkIpaName);
+		System.out.printf("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! iOS APP Absolute path :   %s !!!!!!!!!!! \n \n",
 				iosAppFile.getAbsolutePath());
 
 		DesiredCapabilities d = new DesiredCapabilities();

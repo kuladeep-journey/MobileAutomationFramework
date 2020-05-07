@@ -2,7 +2,10 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Suite">
 	<parameter name="platform" value="android" />
-	<parameter name="phonenumber" value="+919538243666" />
+	<parameter name="appFolderName" value="K2QaApp" />
+	<parameter name="phoneNumber" value="+919538243666" />
+	<parameter name="apkIpaName" value="MobileAgent_v1.0.10_debug_05-05-2020.apk"/>
+	<!-- <parameter name="appExeName" value="MobileAgent_v1.0.10_debug_05-05-2020.apk"/> -->
 	<test thread-count="5" name="Test" preserve-order="true"  enabled="true">
 		<classes>
 			<class name="journeyai.MobileTestAutomation.K2QaApp.FunctionalTestSuite_android" />

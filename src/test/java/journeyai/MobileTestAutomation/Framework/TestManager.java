@@ -26,8 +26,20 @@ public class TestManager {
 	public static AppiumDriver<MobileElement> driver;
 	boolean globalValsInitialized = false;
 	public static String platform;
+	public static String appFolderName;
+	public static String apkIpaName;
 	public static Properties globalParams = new Properties();
 	public static Properties appProperties = new Properties();
+
+	public static void setFWGlobalVariable(String key, String value) {
+		TestManager.globalParams.setProperty(key, value);
+		System.out.println("\n Property key : " + key + " - \t property value: " +TestManager.globalParams.getProperty(key));
+	}
+
+	public static void setAppGlobalVariable(String propName, String propValue) {
+		TestManager.appProperties.setProperty(propName, propValue);
+		System.out.println("\n Property key : " + propName + " - \t property value: " +TestManager.appProperties.getProperty(propName));
+	}
 
 	public void CreateDriver() throws IOException {
 		readGlobalValues();
@@ -76,11 +88,7 @@ public class TestManager {
 		if (globalValsInitialized) {
 			return;
 		}
-//		
-//		globalParams.put("workingdir", System.getProperty("user.dir"));
-//		globalParams.put("automationdir", System.getProperty("user.dir") + "/src/test/java/journeyai/MobileTestAutomation/");
-//		globalParams.put("automationappdir", globalParams.getProperty("automationdir")+globalParams.getProperty("AppUnderTest"));
-//		globalParams.put("appsundertest", globalParams.getProperty("automationdir")+globalParams.getProperty("AppUnderTest")+"/appsUnderTest");
+
 		System.out.println("***************************************" + TestManager.platform);
 		String automationPath = "src/test/java/journeyai/MobileTestAutomation/";
 
@@ -102,28 +110,11 @@ public class TestManager {
 			e.printStackTrace();
 		}
 
-
 		globalParams.setProperty("rootPath", automationPath);
-		globalParams.setProperty("appUnderTestPath", automationPath + globalParams.getProperty("AppUnderTest"));
+		globalParams.setProperty("appUnderTestPath", automationPath + TestManager.appFolderName);
 		globalParams.setProperty("apkPath",
-				automationPath + globalParams.getProperty("AppUnderTest") + "/appsUnderTest/");
+				automationPath + TestManager.appFolderName + "/appsUnderTest/");
 
-		// Print all the key values to console
-		System.out.println(
-				"----------------------------------------------------------------------------------------------\n");
-		System.out.println(
-				"-----------------------------GLOBAL VARIABLES / CONFIG PARAMS---------------------------------\n");
-		System.out.println(
-				"----------------------------------------------------------------------------------------------\n");
-		Enumeration KeyValues = globalParams.keys();
-		while (KeyValues.hasMoreElements()) {
-			String key = (String) KeyValues.nextElement();
-			String value = globalParams.getProperty(key);
-			System.out.println(key + "   -    " + value);
-		}
-		System.out.println(
-				"----------------------------------------------------------------------------------------------\n");
-//		System.out.printf("!!!!!!!     %s   !!!!!", readGlobalValues.getAbsolutePath());
 		globalValsInitialized = true;
 		ReadAppProperties();
 	}
@@ -131,31 +122,52 @@ public class TestManager {
 	public void ReadAppProperties() {
 		String propFile = globalParams.getProperty("appUnderTestPath") + "/" + platform + "_resources.properties";
 		System.out.println("app properties file : " + propFile);
-		System.out.println("================================================================================");
 		// Now add the app properties to Global framework properties
-				File readAppProps = new File(propFile);
-				FileInputStream fileInput = null;
-				try {
-					fileInput = new FileInputStream(readAppProps);
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				try {
-					appProperties.load(fileInput);
-					fileInput.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+		File readAppProps = new File(propFile);
+		FileInputStream fileInput = null;
+		try {
+			fileInput = new FileInputStream(readAppProps);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			appProperties.load(fileInput);
+			fileInput.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		
-		Enumeration KeyValues = appProperties.keys();
+		
+
+	}
+	
+	public static void printglobalValues() {
+		// Print all the key values to console
+				System.out.println(
+						"----------------------------------------------------------------------------------------------\n");
+				System.out.println(
+						"-----------------------------GLOBAL VARIABLES / CONFIG PARAMS---------------------------------\n");
+				System.out.println(
+						"----------------------------------------------------------------------------------------------\n");
+		System.out.println("==========================FW GLOBAL PROPERTIES==================================");
+		Enumeration KeyValues = globalParams.keys();
+		while (KeyValues.hasMoreElements()) {
+			String key = (String) KeyValues.nextElement();
+			String value = globalParams.getProperty(key);
+			System.out.println(key + "   -    " + value);
+		}
+		
+		System.out.println("==========================APP GLOBAL PROPERTIES=================================");
+		
+		KeyValues = appProperties.keys();
 		while (KeyValues.hasMoreElements()) {
 			String key = (String) KeyValues.nextElement();
 			String value = appProperties.getProperty(key);
 			System.out.println(key + "   -    " + value);
 		}
 		System.out.println("================================================================================");
-		
 	}
 
 	@Parameters({ "platform" })

@@ -24,12 +24,18 @@ public class FunctionalTestSuite_android {
 
 	boolean registered = false;
 
-	@Parameters({ "platform"})// , "phonenumber" })
-	public FunctionalTestSuite_android(@Optional("android") String platform) { // , String phonenumber) {
-		TestManager.platform = platform;
-//		TestManager.appProperties.setProperty("phonenumber", phonenumber);
+	@Parameters({ "platform", "appFolderName" , "phoneNumber" , "apkIpaName"})
+	public FunctionalTestSuite_android(@Optional("android") String platform, String appFolder, String phoneNum, String apkIpa) {
 		
+		TestManager.platform = platform;
+		TestManager.appFolderName = appFolder;
+		TestManager.apkIpaName = apkIpa;
+
 		FrameworkUtility.initAppiumDriver(platform);
+		TestManager.setAppGlobalVariable("phonenumber", phoneNum);
+				
+		TestManager.printglobalValues();
+		
 		FrameworkUtility.AddDelay(2000);
 	}
 
@@ -73,7 +79,7 @@ public class FunctionalTestSuite_android {
 
 	}
 
-	@Test
+//	@Test
 	public void verifyAddress() throws InterruptedException {
 		System.out.println("In ADDRESS Verification............................. : START");
 		boolean errorToast = false;
@@ -238,7 +244,7 @@ public class FunctionalTestSuite_android {
 
 
 //		FrameworkUtility.AddDelay(20000);
-		WebDriverWait wait = new WebDriverWait(TestManager.driver, 120);
+		WebDriverWait wait = new WebDriverWait(TestManager.driver, 20);
 		
 		MobileElement element = (MobileElement) wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("com.android.dialer:id/action0")));
 		

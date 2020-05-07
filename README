@@ -5,6 +5,20 @@ Asssumptions:
 3. Add all the Appium jar files required for automation
 4. Now select andropid/ios testng.xml file and run as testng suite.
 
+Notes:
+Update TestManager parameters before creating driver: 
+- 1. platform : This variable has to be set before creating driver
+- 2. appFolderName : This is the app automation folder name, This variable is also required to be se before driver is created
+- 3. apkIpaName : 
+- 4. phonenumber: If phone number is used in app automation, provide this as app global property, set App global properties using TestManager method
+
+All properties related to framework/automation setup to execute properly, are framework params
+All properties which are only limited to the application under test are app global properties.
+
+Once implementation is done run below command to execute automation:
+
+$ cd <Project root folder>
+$ mvn clean test -DFileName=<automation testng xml file ex: QaApp_ios_testng.xml>
 
 #Directory structure:
 

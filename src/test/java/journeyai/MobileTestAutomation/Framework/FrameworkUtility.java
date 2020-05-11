@@ -76,14 +76,22 @@ public class FrameworkUtility {
 		}
 
 		if (id != null) {
-
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.id(id)));
-
+			try {
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.id(id)));
+			} catch (Exception e) {
+				System.out.println("Unable to find the element with id : " + e.toString());
+				return null;
+			}
 			element = TestManager.driver.findElement(By.id(id));
 
 		} else if (xPath != null) {
 
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xPath)));
+			try {
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xPath)));
+			} catch (Exception e) {
+				System.out.println("Unable to find the element with id : " + e.toString());
+				return null;
+			}
 
 			element = TestManager.driver.findElement(By.xpath(xPath));
 		}

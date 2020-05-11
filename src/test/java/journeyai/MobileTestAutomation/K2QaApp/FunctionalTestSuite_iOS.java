@@ -27,17 +27,17 @@ public class FunctionalTestSuite_iOS {
 	boolean registered = false;
 
 	@Parameters({ "platform", "appFolderName", "phoneNumber", "apkIpaName" })
-	public FunctionalTestSuite_iOS(@Optional("ios") String platform, String appFolder, String phoneNum, String apkIpa) {
+	public FunctionalTestSuite_iOS(@Optional("ios") String platform, String appFolderName, String phoneNumber, String apkIpaName) {
 
 		TestManager.setPlatform(platform);
 
-		TestManager.setAppUnderTestFolderName(appFolder);
+		TestManager.setAppUnderTestFolderName(appFolderName);
 
-		TestManager.setapkIpaName(apkIpa);
+		TestManager.setapkIpaName(apkIpaName);
 
 		FrameworkUtility.initAppiumDriver(platform);
 
-		TestManager.setAppGlobalVariable("phonenumber", phoneNum);
+		TestManager.setAppGlobalVariable("phonenumber", phoneNumber);
 
 		TestManager.printglobalValues();
 

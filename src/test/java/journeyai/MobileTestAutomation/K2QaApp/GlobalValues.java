@@ -11,7 +11,7 @@ public class GlobalValues {
 	String K2BankUrl;
 	static int TOAST_MAX_WAIT_DURATION = 30;
 	static int PUSH_NOTIFICATION_MAX_WAIT_DURATION = 60;
-	static int DEFAULT_DELAY_MILLISEC = 5000;
+	static int DEFAULT_DELAY_MILLISEC = 2000;
 
 	static String ADDRESS_VERIFICATION_BTN = "ADDRESS VERIFICATION";
 	static String ADDRESS_VERIFICATION_BTN_ID = "ai.journey.k2bank:id/addressVerifcation";

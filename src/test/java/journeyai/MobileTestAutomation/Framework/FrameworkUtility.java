@@ -294,30 +294,30 @@ public class FrameworkUtility {
 		actions.release();
 		actions.perform();
 	}
-	
+
 	private static MobileElement findFromVisibleListElements(MobileElement listToCheck, String childClassname,
 			String elemText) {
 		String xpathToFind = "//" + childClassname + "[@text= \"" + elemText + "\"]";
 		try {
 			MobileElement elemToFind = listToCheck.findElement(By.xpath(xpathToFind));
-			
+
 			if (elemToFind != null && elemToFind.getText().equalsIgnoreCase(elemText)) {
 				System.out.println("Found in current page, will just return.... !!!!");
 				return elemToFind;
 			} else {
 				System.out.println("Not found in current page, will scroll and find !!!!");
 			}
-			
-		} catch (Exception e ) {
+
+		} catch (Exception e) {
 			System.out.println("Element is not visible in current list");
 			return null;
 		}
-		
-		
+
 		return null;
 	}
 
-	public static MobileElement searchListScrollingToTop(MobileElement listElement, String childClassname, String elemText) {
+	public static MobileElement searchListScrollingToTop(MobileElement listElement, String childClassname,
+			String elemText) {
 
 		List<MobileElement> allVisibleElements = listElement.findElements(By.className(childClassname));
 		String prevStart = allVisibleElements.get(0).getText();
@@ -337,7 +337,7 @@ public class FrameworkUtility {
 //		 now perform scroll
 		while (!reachedTop) {
 			pageUp(listElement);
-			
+
 			foundElem = findFromVisibleListElements(listElement, childClassname, elemText);
 			if (foundElem != null) {
 				return foundElem;
@@ -356,9 +356,8 @@ public class FrameworkUtility {
 		return foundElem;
 	}
 
-	
-
-	public static MobileElement searchListScrollingToBottom(MobileElement listElement, String childClassname, String elemText) {
+	public static MobileElement searchListScrollingToBottom(MobileElement listElement, String childClassname,
+			String elemText) {
 		System.out.println("Scrolling to bottom now !!!!!!");
 		List<MobileElement> allVisibleElements = listElement.findElements(By.className(childClassname));
 		String prevBottom = allVisibleElements.get(allVisibleElements.size() - 1).getText();
@@ -369,6 +368,7 @@ public class FrameworkUtility {
 		System.out.println("Previous start : " + prevBottom + "\n Current Start : " + currentBottom);
 //		check if the element is directly visible in current screen
 		foundElem = findFromVisibleListElements(listElement, childClassname, elemText);
+
 		if (foundElem != null) {
 			return foundElem;
 		}

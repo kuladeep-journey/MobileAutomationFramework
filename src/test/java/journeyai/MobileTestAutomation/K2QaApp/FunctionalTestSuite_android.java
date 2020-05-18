@@ -47,9 +47,9 @@ public class FunctionalTestSuite_android {
 	public void failTest(String message) {
 		Assert.assertTrue(false, message);
 	}
-	
-public void answerIncomingCall() {
-		
+
+	public void answerIncomingCall() {
+
 //		com.android.dialer:id/action2
 		((AndroidDriver) TestManager.driver).openNotifications();
 
@@ -64,30 +64,31 @@ public void answerIncomingCall() {
 		Assert.assertNotEquals(element, null, "Incoming call isnot received");
 
 		element.click();
-		
+
 	}
-	
+
 	public void disconnectOngoingCall() {
 		System.out.println("In disconnect ongoign call, check for completed message !!!");
 		MobileElement element = null;
-		
+
 		WebDriverWait wait = new WebDriverWait(TestManager.driver, 20);
-		
+
 		try {
-		
-			element = (MobileElement) wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("com.android.dialer:id/op_call_card_container")));
-			
+
+			element = (MobileElement) wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.id("com.android.dialer:id/op_call_card_container")));
+
 		} catch (Exception e) {
 			System.out.println("Error : Ongoing call screen is not in focus");
 		}
 		FrameworkUtility.findElementById("com.android.dialer:id/floating_end_call_action_button").click();
-		
+
 		System.out.println("In disconnect ongoign call : Completed disconnect call");
-		
+
 	}
 
 	public void rejectIncomingCall() {
-		
+
 		((AndroidDriver) TestManager.driver).openNotifications();
 
 		WebDriverWait wait = new WebDriverWait(TestManager.driver, 20);
@@ -194,7 +195,7 @@ public void answerIncomingCall() {
 
 //	@Test
 	public void verifySsn() throws InterruptedException {
-		
+
 		System.out.println("In SSN Verification..........................: START");
 
 //		Register mobile number if not registered already (this methods works like a singleton)
@@ -240,7 +241,7 @@ public void answerIncomingCall() {
 //	@Test
 	public void verifyDob() throws InterruptedException {
 		System.out.println("In DOB Verification..........................: START");
-		
+
 //		Register mobile number if not registered already (this methods works like a singleton)
 		registerMobilenumber();
 
@@ -284,7 +285,7 @@ public void answerIncomingCall() {
 //	@Test
 	public void verifyFraudNotificationDontCall() throws InterruptedException {
 		System.out.println("In FRAUD NOTIFICATION Verification: Don't Call ..........................: START");
-		
+
 //		Register mobile number if not registered already (this methods works like a singleton)
 		registerMobilenumber();
 
@@ -305,19 +306,20 @@ public void answerIncomingCall() {
 
 		temp = FrameworkUtility.waitForElementVisible(
 				TestManager.appProperties.getProperty("push_notification_fraud_radio_dont_call_id"), null, 10);
-		
+
 		if (temp == null) {
 			failTest("Error: In address Verification - Push Notification is not received, waited for 10 seconds");
 		}
 		temp.click();
-	
-		System.out.println("Completed FRAUD NOTIFICATION Verification : Don't Call .......................... SUCCESS : END");
+
+		System.out.println(
+				"Completed FRAUD NOTIFICATION Verification : Don't Call .......................... SUCCESS : END");
 	}
-	
+
 	@Test
 	public void verifyFraudNotificationCallNow() throws InterruptedException {
 		System.out.println("In FRAUD NOTIFICATION Verification: Call Now ..........................: START");
-		
+
 //		Register mobile number if not registered already (this methods works like a singleton)
 		registerMobilenumber();
 
@@ -335,18 +337,18 @@ public void answerIncomingCall() {
 			System.out.println(
 					"There was no error from desktop agent ... !!! clicked FRAUD verification, waiting for popup");
 		}
-		
+
 		temp = FrameworkUtility.waitForElementVisible(
 				TestManager.appProperties.getProperty("push_notification_fraud_radio_call_now_id"), null, 10);
-		
+
 		if (temp == null) {
 			failTest("Error: In address Verification - Push Notification is not received, waited for 10 seconds");
 		}
-		
+
 		temp.click();
-		
+
 		temp = FrameworkUtility.waitForElementVisible(null, "//android.widget.Toast", 3);
-		
+
 		if (temp != null) {
 			if (temp.getText().equalsIgnoreCase("SUCCESS")) {
 				System.out.println(
@@ -356,74 +358,72 @@ public void answerIncomingCall() {
 			}
 		}
 		answerIncomingCall();
-		
-		FrameworkUtility.AddDelay(500);
-		
-		disconnectOngoingCall();
-		
-	
-		System.out.println("Completed FRAUD NOTIFICATION Verification : Call Now .......................... SUCCESS : END");
-	}
 
+		FrameworkUtility.AddDelay(500);
+
+		disconnectOngoingCall();
+
+		System.out.println(
+				"Completed FRAUD NOTIFICATION Verification : Call Now .......................... SUCCESS : END");
+	}
 
 //	@DataProvider
 	public Object[][] getFraudCallTestType() {
 		Object[][] data = new Object[4][2];
 		data[0][0] = "DONTCALL";
 		data[0][1] = null;
-		
+
 		data[1][0] = "CALL";
 		data[1][1] = "REJECT";
-		
+
 		data[2][0] = "CALL";
 		data[2][1] = "ANSWER";
-		
+
 		data[3][0] = "LATER";
 		data[3][1] = null;
-		
+
 		return data;
 	}
-	
+
 //	@Test(dataProvider="getFraudCallTestType")
 	public void verifyFraudNotification(String option, String action) throws InterruptedException {
 		System.out.println("In FRAUD NOTIFICATION Verification: ..........................: START");
-		
+
 //		Register mobile number if not registered already (this methods works like a singleton)
 		registerMobilenumber();
 
 		AppCommon.switchToAgentView();
-		
+
 		System.out.println("clicking on Agent PAGE Fraud notification button: ..........................");
 		FrameworkUtility
 				.findButtonWithText(TestManager.appProperties.getProperty("agent_page_fraud_verification_btn_text"))
 				.click();
 		MobileElement temp = null;
 		temp = FrameworkUtility.waitForElementVisible(null, "//android.widget.Toast", 3);
-		
+
 		if (temp != null) {
-			if (temp.getText().equalsIgnoreCase("success") ){
+			if (temp.getText().equalsIgnoreCase("success")) {
 				System.out.println("On selection of fraud notification button, toast is displayed");
 			} else {
-				failTest("Error: In FRAUD Verification - DesktopAgent returned :" + temp.getText());	
+				failTest("Error: In FRAUD Verification - DesktopAgent returned :" + temp.getText());
 			}
 		} else {
-			System.out.println(
-					"There was no no toast to wait for, waiting for popup");
+			System.out.println("There was no no toast to wait for, waiting for popup");
 		}
 		MobileElement callOption = null;
-		
+
 		if (option.equalsIgnoreCase("DONTCALL")) {
 			System.out.println("In DONTCALL : ..........................:START");
 			callOption = FrameworkUtility.waitForElementVisible(
 					TestManager.appProperties.getProperty("ai.journey.k2bank:id/dontCall"), null, 10);
-			
+
 			if (callOption == null) {
 				failTest("Error: In Fraud Verification - Push Notification is not received, waited for 10 seconds");
 			}
-			
+
 			callOption.click();
 			System.out.println("In DONTCALL : ..........................:END");
-			
+
 		} else if (option.equalsIgnoreCase("CALL")) {
 			System.out.println("In CALLNOW : ..........................:START");
 			callOption = FrameworkUtility.waitForElementVisible(
@@ -459,9 +459,9 @@ public void answerIncomingCall() {
 
 				disconnectOngoingCall();
 			}
-			
+
 			System.out.println("In CALLNOW : ..........................:END");
-			
+
 		} else if (option.equalsIgnoreCase("LATER")) {
 			// This option will be implemented once support in backend is available
 			System.out.println("In CALL LATER : ..........................:START");
@@ -473,9 +473,9 @@ public void answerIncomingCall() {
 			}
 
 			callOption.click();
-			
+
 			MobileElement temp2 = null;
-			
+
 			temp2 = FrameworkUtility.waitForElementVisible(null, "//android.widget.Toast", 3);
 
 			if (temp2 != null) {
@@ -486,17 +486,17 @@ public void answerIncomingCall() {
 					failTest("Error: In address Verification - DesktopAgent returned :" + temp2.getText());
 				}
 			}
-			
+
 			rejectIncomingCall();
 			System.out.println("In CALL LATER : ..........................:END");
 		}
-		
+
 		FrameworkUtility.AddDelay(2000);
-	
-		System.out.println("Completed FRAUD NOTIFICATION Verification : Call Now .......................... SUCCESS : END");
+
+		System.out.println(
+				"Completed FRAUD NOTIFICATION Verification : Call Now .......................... SUCCESS : END");
 	}
 
-	
 //	@Test
 	public void verifyOutBoundCall() throws InterruptedException {
 

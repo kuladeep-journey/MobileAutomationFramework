@@ -27,7 +27,8 @@ public class FunctionalTestSuite_iOS {
 	boolean registered = false;
 
 	@Parameters({ "platform", "appFolderName", "phoneNumber", "apkIpaName" })
-	public FunctionalTestSuite_iOS(@Optional("ios") String platform, String appFolderName, String phoneNumber, String apkIpaName) {
+	public FunctionalTestSuite_iOS(@Optional("ios") String platform, String appFolderName, String phoneNumber,
+			String apkIpaName) {
 
 		TestManager.setPlatform(platform);
 

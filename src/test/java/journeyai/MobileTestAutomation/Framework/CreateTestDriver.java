@@ -30,6 +30,7 @@ public class CreateTestDriver {
 
 		File androidAppLocation = new File(currentRoot, TestManager.globalParams.getProperty("apkPath"));
 		System.out.printf("\n\n.........APK file location : %s .......... \n\n", androidAppLocation.getAbsolutePath());
+
 		File apkFile = new File(androidAppLocation, TestManager.apkIpaName);
 		System.out.printf("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! APK Absolute path :   %s !!!!!!!!!!! \n \n",
 				apkFile.getAbsolutePath());

@@ -98,11 +98,11 @@ public class AppCommon {
 	}
 
 	public static boolean waitForPopUpwithID(String popupId, int maxWaitSeconds) {
-		
+
 		String expectedTxt = "Bank is requesting you verify";
-		
+
 		if (maxWaitSeconds == 0) {
-		
+
 			maxWaitSeconds = 10;
 		}
 		WebDriverWait wait = new WebDriverWait(TestManager.driver, maxWaitSeconds);
@@ -119,10 +119,10 @@ public class AppCommon {
 		System.out.printf("\n Actual Text : %s \n", txt);
 
 		if (txt.contains(expectedTxt.toLowerCase())) {
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
 

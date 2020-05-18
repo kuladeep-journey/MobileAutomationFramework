@@ -8,18 +8,12 @@ import java.util.Enumeration;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Parameters;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
-import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.AndroidElement;
-import io.appium.java_client.ios.IOSDriver;
-import io.appium.java_client.ios.IOSElement;
-import io.appium.java_client.service.local.AppiumDriverLocalService;
 
 public class TestManager {
 
@@ -30,63 +24,62 @@ public class TestManager {
 	public static String apkIpaName;
 	public static Properties globalParams = new Properties();
 	public static Properties appProperties = new Properties();
-	
 
 	public static void setFWGlobalVariable(String key, String value) {
-		
+
 		TestManager.globalParams.setProperty(key, value);
-		
+
 		System.out.println(
 				"\n Property key : " + key + " - \t property value: " + TestManager.globalParams.getProperty(key));
 	}
 
 	public static void setAppGlobalVariable(String propName, String propValue) {
-		
+
 		TestManager.appProperties.setProperty(propName, propValue);
-		
+
 		System.out.println("\n Property key : " + propName + " - \t property value: "
 				+ TestManager.appProperties.getProperty(propName));
 	}
 
 	public void CreateDriver() throws IOException {
-		
+
 		readGlobalValues();
-		
+
 		System.out.println("Create Driver ..................... : START");
-		
+
 		if (driver == null) {
 
 			// check platform and create corresponding driver
 
 			if (platform.equalsIgnoreCase("android")) {
-				
+
 				createAndroidDriver();
-				
+
 			} else if (platform.equalsIgnoreCase("ios")) {
-				
+
 				createiosDriver();
-				
+
 			}
 
 			System.out.println("Create Driver ..................... : END");
 
 		}
-		
+
 		return;
 	}
 
 	public void createAndroidDriver() throws IOException {
-		
+
 		driver = CreateTestDriver.AndroidCapabilities();
-		
+
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		
+
 	}
 
 	public void createiosDriver() throws IOException {
 
 		driver = CreateTestDriver.IOSCapabilities();
-		
+
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
 	}
@@ -108,61 +101,61 @@ public class TestManager {
 				readGlobalValuesFile.getAbsolutePath());
 
 		FileInputStream fileInput = null;
-		
+
 		try {
-		
+
 			fileInput = new FileInputStream(readGlobalValuesFile);
-		
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 		try {
-			
+
 			globalParams.load(fileInput);
-		
+
 			fileInput.close();
-		
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		globalParams.setProperty("rootPath", automationPath);
-		
+
 		globalParams.setProperty("appUnderTestPath", automationPath + TestManager.appFolderName);
-		
+
 		globalParams.setProperty("apkPath", automationPath + TestManager.appFolderName + "/appsUnderTest/");
 
 		globalValsInitialized = true;
-		
+
 		ReadAppProperties();
-		
+
 	}
 
 	public void ReadAppProperties() {
-		
+
 		String propFile = globalParams.getProperty("appUnderTestPath") + "/" + platform + "_resources.properties";
-		
+
 		System.out.println("app properties file : " + propFile);
 		// Now add the app properties to Global framework properties
 		File readAppProps = new File(propFile);
-		
+
 		FileInputStream fileInput = null;
-		
+
 		try {
-			
+
 			fileInput = new FileInputStream(readAppProps);
-			
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 		try {
-			
+
 			appProperties.load(fileInput);
-			
+
 			fileInput.close();
-		
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -174,12 +167,12 @@ public class TestManager {
 	 * platform specific driver
 	 */
 	public static void setPlatform(String execPlatform) {
-		
+
 		platform = execPlatform;
 	}
 
 	public static String getPlatform() {
-		
+
 		return platform;
 	}
 
@@ -196,7 +189,7 @@ public class TestManager {
 
 		return appFolderName;
 	}
-	
+
 	/*
 	 * This method will set the Apk or ipa file name to install and test on mobile
 	 * 
@@ -221,15 +214,15 @@ public class TestManager {
 				"----------------------------------------------------------------------------------------------\n");
 		System.out.println(
 				"==================================FW GLOBAL PROPERTIES=========================================\n");
-		
+
 		Enumeration KeyValues = globalParams.keys();
-		
+
 		while (KeyValues.hasMoreElements()) {
-			
+
 			String key = (String) KeyValues.nextElement();
 			String value = globalParams.getProperty(key);
 			System.out.println(key + "   -    " + value);
-			
+
 		}
 
 		System.out.println("==========================APP GLOBAL PROPERTIES=================================");
@@ -240,33 +233,31 @@ public class TestManager {
 			String value = appProperties.getProperty(key);
 			System.out.println(key + "   -    " + value);
 		}
-		
+
 		System.out.println("================================================================================");
 	}
 
 	@Parameters({ "platform" })
 	@BeforeSuite
 	public void InitDriver(String testPlatform) throws IOException {
-		
+
 		System.out.println("\n Before Suite: .... : START");
 //		startAppiumServer();
-		
+
 		platform = testPlatform;
-		
+
 		CreateDriver();
-		
+
 		System.out.println("\n Before Suite: .... : END");
 	}
-	
-	
 
 	@AfterSuite
 	public void closeDriver() {
-		
+
 		System.out.println("After Suite: ....!!!!");
-		
+
 		System.out.println("Completed the test suite, thus closing app and driver");
-		
+
 		driver.close();
 //		stopAppiumServer();
 	}

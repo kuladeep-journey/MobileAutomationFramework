@@ -192,7 +192,7 @@ public void answerIncomingCall() {
 
 	}
 
-	@Test
+//	@Test
 	public void verifySsn() throws InterruptedException {
 		
 		System.out.println("In SSN Verification..........................: START");
@@ -237,7 +237,7 @@ public void answerIncomingCall() {
 		System.out.println("Completed SSN Verification............................. SUCCESS : END");
 	}
 
-	@Test
+//	@Test
 	public void verifyDob() throws InterruptedException {
 		System.out.println("In DOB Verification..........................: START");
 		
@@ -281,7 +281,7 @@ public void answerIncomingCall() {
 		System.out.println("Completed DOB Verification.......................... SUCCESS : END");
 	}
 
-	@Test
+//	@Test
 	public void verifyFraudNotificationDontCall() throws InterruptedException {
 		System.out.println("In FRAUD NOTIFICATION Verification: Don't Call ..........................: START");
 		
@@ -497,7 +497,7 @@ public void answerIncomingCall() {
 	}
 
 	
-	@Test
+//	@Test
 	public void verifyOutBoundCall() throws InterruptedException {
 
 //		Register mobile number if not registered already (this methods works like a singleton)

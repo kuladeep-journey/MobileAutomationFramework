@@ -19,10 +19,10 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.ios.IOSElement;
+import io.appium.java_client.service.local.AppiumDriverLocalService;
 
 public class TestManager {
-//	public static AndroidDriver<AndroidElement> andydriver;
-//	public static IOSDriver<IOSElement> iosdriver;
+
 	public static AppiumDriver<MobileElement> driver;
 	boolean globalValsInitialized = false;
 	public static String platform;
@@ -30,6 +30,7 @@ public class TestManager {
 	public static String apkIpaName;
 	public static Properties globalParams = new Properties();
 	public static Properties appProperties = new Properties();
+	
 
 	public static void setFWGlobalVariable(String key, String value) {
 		
@@ -248,6 +249,7 @@ public class TestManager {
 	public void InitDriver(String testPlatform) throws IOException {
 		
 		System.out.println("\n Before Suite: .... : START");
+//		startAppiumServer();
 		
 		platform = testPlatform;
 		
@@ -255,6 +257,8 @@ public class TestManager {
 		
 		System.out.println("\n Before Suite: .... : END");
 	}
+	
+	
 
 	@AfterSuite
 	public void closeDriver() {
@@ -264,6 +268,7 @@ public class TestManager {
 		System.out.println("Completed the test suite, thus closing app and driver");
 		
 		driver.close();
+//		stopAppiumServer();
 	}
 
 }

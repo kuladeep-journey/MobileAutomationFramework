@@ -70,3 +70,12 @@ $ mvn clean test -DFileName=<automation testng xml file ex: QaApp_ios_testng.xml
 	|-> SfaApp_ios_testng.xml. (this file will run all tests for iOS SfaApp)
 	|
 	…
+
+	NOTES:
+	
+	in POM.xml file, add below dependencies to auto start and stop appium server
+	slf4j-simple
+	slf4j-api
+	commons-lang3
+	commons-io
+	commons-validator

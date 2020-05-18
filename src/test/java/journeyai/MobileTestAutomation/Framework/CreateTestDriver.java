@@ -44,6 +44,8 @@ public class CreateTestDriver {
 		AndroidDriver<MobileElement> driver = new AndroidDriver<MobileElement>(
 				new URL(TestManager.globalParams.getProperty("appiumserverurl")), cap);
 
+//		AndroidDriver<MobileElement> driver = new AndroidDriver<MobileElement>(TestManager.service.getUrl(), cap);
+
 		return driver;
 	}
 

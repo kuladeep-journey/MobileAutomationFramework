@@ -1,15 +1,17 @@
 package journeyai.MobileTestAutomation.Framework;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.By;
-
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.TouchAction;
+import io.appium.java_client.touch.WaitOptions;
+import io.appium.java_client.touch.offset.PointOption;
 
 public class FrameworkUtility {
 
@@ -245,5 +247,154 @@ public class FrameworkUtility {
 		}
 
 		return TestManager.driver.findElement(By.xpath(path));
+	}
+
+	/*
+	 * This method will just fool the execution of testNG and makes the test fail
+	 * immediately
+	 * 
+	 * @message: This is the console log message if user wants to print for
+	 * debugging purpose
+	 * 
+	 */
+	public static void failTest(String message) {
+		Assert.assertTrue(false, message);
+	}
+
+	public static void pressDeviceBackButton() {
+		TestManager.driver.navigate().back();
+	}
+
+	public static void pageUp(MobileElement ele) {
+		int margin = 100;
+		int xPos = ele.getRect().x + ele.getRect().width / 2;
+		int yFrom = (ele.getRect().y + ele.getRect().width) / 2 + margin;
+		int yTo = ele.getRect().y + ele.getRect().height - margin;
+		System.out.println("xpos : " + xPos + "startY : " + yFrom + "EndY : " + yTo);
+		TouchAction actions = new TouchAction(TestManager.driver);
+		actions.press(new PointOption().point(xPos, yFrom));
+		actions.waitAction(new WaitOptions());
+		actions.moveTo(new PointOption().point(xPos, yTo));
+		actions.release();
+		actions.perform();
+
+	}
+
+	public static void pageDown(MobileElement ele) {
+		int margin = 100;
+
+		int xPos = ele.getRect().x + ele.getRect().width / 2;
+		int yFrom = ele.getRect().y + ele.getRect().height - margin;
+		int yTo = (ele.getRect().y + ele.getRect().width) / 2 + margin;
+		System.out.println("xpos : " + xPos + "startY : " + yFrom + "EndY : " + yTo);
+		TouchAction actions = new TouchAction(TestManager.driver);
+		actions.press(new PointOption().point(xPos, yFrom));
+		actions.waitAction(new WaitOptions());
+		actions.moveTo(new PointOption().point(xPos, yTo));
+		actions.release();
+		actions.perform();
+	}
+	
+	private static MobileElement findFromVisibleListElements(MobileElement listToCheck, String childClassname,
+			String elemText) {
+		String xpathToFind = "//" + childClassname + "[@text= \"" + elemText + "\"]";
+		try {
+			MobileElement elemToFind = listToCheck.findElement(By.xpath(xpathToFind));
+			
+			if (elemToFind != null && elemToFind.getText().equalsIgnoreCase(elemText)) {
+				System.out.println("Found in current page, will just return.... !!!!");
+				return elemToFind;
+			} else {
+				System.out.println("Not found in current page, will scroll and find !!!!");
+			}
+			
+		} catch (Exception e ) {
+			System.out.println("Element is not visible in current list");
+			return null;
+		}
+		
+		
+		return null;
+	}
+
+	public static MobileElement searchListScrollingToTop(MobileElement listElement, String childClassname, String elemText) {
+
+		List<MobileElement> allVisibleElements = listElement.findElements(By.className(childClassname));
+		String prevStart = allVisibleElements.get(0).getText();
+		String currentStart = null;
+		boolean reachedTop = false;
+		boolean foundElement = false;
+		MobileElement foundElem = null;
+		System.out.println("Previous start : " + prevStart + "\n Current Start : " + currentStart);
+//		check if the element is directly visible in current screen
+		foundElem = findFromVisibleListElements(listElement, childClassname, elemText);
+		if (foundElem != null) {
+			System.out.println("!!!!!!!!!!!!!!!  element found is not null !!!!!!!!!!!!!!!!!!!!!");
+			return foundElem;
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!  element found is NULL !!!!!!!!!!!!!!!!!!!!!");
+		}
+//		 now perform scroll
+		while (!reachedTop) {
+			pageUp(listElement);
+			
+			foundElem = findFromVisibleListElements(listElement, childClassname, elemText);
+			if (foundElem != null) {
+				return foundElem;
+			}
+//			if element is not found in this page then continue page down
+//			 This is to check whether we reached bottom or not
+			allVisibleElements = listElement.findElements(By.className(childClassname));
+			currentStart = allVisibleElements.get(0).getText();
+			System.out.println("Previous start : " + prevStart + "\n Current Start : " + currentStart);
+			if (currentStart.equals(prevStart)) {
+				reachedTop = true;
+			} else {
+				prevStart = currentStart;
+			}
+		}
+		return foundElem;
+	}
+
+	
+
+	public static MobileElement searchListScrollingToBottom(MobileElement listElement, String childClassname, String elemText) {
+		System.out.println("Scrolling to bottom now !!!!!!");
+		List<MobileElement> allVisibleElements = listElement.findElements(By.className(childClassname));
+		String prevBottom = allVisibleElements.get(allVisibleElements.size() - 1).getText();
+		String currentBottom = null;
+		boolean reachedBottom = false;
+		boolean foundElement = false;
+		MobileElement foundElem = null;
+		System.out.println("Previous start : " + prevBottom + "\n Current Start : " + currentBottom);
+//		check if the element is directly visible in current screen
+		foundElem = findFromVisibleListElements(listElement, childClassname, elemText);
+		if (foundElem != null) {
+			return foundElem;
+		}
+//		 now perform scroll
+		while (!reachedBottom) {
+			pageDown(listElement);
+			foundElem = findFromVisibleListElements(listElement, childClassname, elemText);
+			if (foundElem != null) {
+				return foundElem;
+			}
+//			if element is not found in this page then continue page down
+//			 This is to check whether we reached bottom or not
+			allVisibleElements = listElement.findElements(By.className(childClassname));
+			currentBottom = allVisibleElements.get(allVisibleElements.size() - 1).getText();
+			System.out.println("Previous start : " + prevBottom + "\n Current Start : " + currentBottom);
+			if (currentBottom.equals(prevBottom)) {
+				reachedBottom = true;
+			} else {
+				prevBottom = currentBottom;
+			}
+		}
+		return foundElem;
+
+	}
+
+	public static void findElementinScrollableList() {
+
 	}
 }

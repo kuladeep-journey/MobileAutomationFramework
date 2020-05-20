@@ -19,7 +19,7 @@ public class OnBoardingPage {
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 	}
 
-//All elements are defined here ......
+//	All elements are defined here ......
 	@AndroidFindBy(xpath = "//android.widget.TextView[@text=\"Sign Up\"]")
 	@iOSXCUITFindBy(xpath = "")
 	public MobileElement signUpBtn;
@@ -35,6 +35,7 @@ public class OnBoardingPage {
 		try {
 			signUpBtn.isDisplayed();
 		} catch (Exception e) {
+			System.out.println("SignUp button Text: " +signUpBtn.getText());
 			System.out.println("SignUp Page is not the current screen on the device...!!!");
 			return false;
 		}

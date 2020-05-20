@@ -108,7 +108,6 @@ public class IdentityRegistrationPage {
 	}
 
 	public MobileElement getselfieCemraButton() {
-		// TODO Auto-generated method stub
 		return allselfieImageButtons.get(2);
 	}
 	

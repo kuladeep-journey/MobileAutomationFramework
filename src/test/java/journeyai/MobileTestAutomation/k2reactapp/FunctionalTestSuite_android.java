@@ -5,13 +5,14 @@ import org.testng.annotations.Test;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import journeyai.MobileTestAutomation.Framework.TestManager;
+import journeyai.MobileTestAutomation.k2reactapp.pages.HomePage.HomePage;
+import journeyai.MobileTestAutomation.k2reactapp.pages.HomePage.MenuPage;
 import journeyai.MobileTestAutomation.k2reactapp.pages.OnBoardingPages.IdentityRegistrationPage;
 import journeyai.MobileTestAutomation.k2reactapp.pages.OnBoardingPages.OnBoardingPage;
 import journeyai.MobileTestAutomation.k2reactapp.pages.OnBoardingPages.RegisterPhoneNumberPage;
 import journeyai.MobileTestAutomation.Framework.FrameworkUtility;
 
-
-
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
@@ -48,7 +49,7 @@ public class FunctionalTestSuite_android {
 		FrameworkUtility.AddDelay(2000);	
 	}
 	
-	@Test
+	@Test(priority = 0)
 	public void onBoarding() {
 		
 		OnBoardingPage onBoard = new OnBoardingPage(driver);
@@ -72,7 +73,7 @@ public class FunctionalTestSuite_android {
 //				rp.enterVerificationCode("55b1e1");
 				rp.clickConfirmVerificationCode();
 				
-				IdentityRegistrationPage irp = new IdentityRegistrationPage(TestManager.driver);
+				IdentityRegistrationPage irp = new IdentityRegistrationPage(driver);
 				if (irp.isIdentityRegistrationPage()) {
 					irp.driverLicenseBtn.click();
 //					FrameworkUtility.AddDelay(500);
@@ -95,6 +96,8 @@ public class FunctionalTestSuite_android {
 					FrameworkUtility.AddDelay(4000);
 					irp.continueToAccount.click();
 					FrameworkUtility.AddDelay(2000);
+					
+//					logOut();
 				} else {
 					FrameworkUtility.failTest("ERROR : Failed in identity registration...!!!!");
 				}
@@ -109,19 +112,38 @@ public class FunctionalTestSuite_android {
 		}
 	}
 	
-	@Test
+	@Test(priority = 1)
 	public void logOut() {
-		// create page for menu button 
+// This test case will work iff the user logged in and Menu button is visible
+		
+		HomePage appHome = new HomePage(driver);
 
-		FrameworkUtility.AddDelay(2000);
-		FrameworkUtility.findElementByXpath("//android.widget.TextView[@text=\"Menu\"]").click();
+		if (appHome.isHomePage()) {
+			appHome.getMenuTabButton().click();
+			MenuPage mp = new MenuPage(driver);
 
-		FrameworkUtility.AddDelay(500);
-		MobileElement ele = TestManager.driver.findElementByClassName("android.widget.ScrollView");
-		FrameworkUtility.pageDown(ele);
-
-		FrameworkUtility.AddDelay(500);
-		FrameworkUtility.findElementByXpath("//android.widget.TextView[@text=\"Log Out\"]").click();
+			if (mp.isMenuPage()) {
+				System.out.println("Entered menu page ...!!!");
+				mp.getLogOutOption().click();
+				
+			} else {
+				System.out.println("Menu page not available ...!!!");
+			}
+			
+			FrameworkUtility.AddDelay(5000);
+			OnBoardingPage obp = new OnBoardingPage(driver);
+			
+			if (!obp.isSignUpPage()) {
+				
+				FrameworkUtility.failTest("SignUp page is not shown to user !!!!");
+			}
+		} else {
+			FrameworkUtility.failTest("Home page is not shown yet ...!!!!");
+		}
 	}
 
+	@AfterSuite
+	public void closeApp() {
+		driver.closeApp();
+	}
 }
